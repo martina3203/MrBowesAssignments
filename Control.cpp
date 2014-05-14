@@ -14,6 +14,7 @@ Control::Control()
     deathByStarvation = 0;
     deathByCat = 0;
     deathByDrowning = 0;
+    mouseVictory = 0;
 
     //Seed random number generator
     randomNumberSeed = time(NULL);
@@ -50,8 +51,8 @@ void Control::trialRun()
     wait(1);
     while ((mouseStatus != 'V') && (mouseStatus != 'D') && (mouseStatus != 'C') && (mouseStatus != 'S'))
     {
-        catMove();
         mouseStatus = mouseMove();
+        catMove();
         printScreen();
         wait(1);
     }
@@ -74,7 +75,6 @@ void Control::catMove()
         {
             //Up
             case 0:
-                //if (mapArray[catX][catY])
                 theCat.unitMove(selection);
                 break;
             //Down
@@ -94,7 +94,7 @@ void Control::catMove()
                 break;
         }
 
-         if (mapArray[theCat.returnXCoordinate()][theCat.returnYCoordinate()] == '~')
+         if (mapArray[theCat.returnYCoordinate()][theCat.returnXCoordinate()] == '~')
          {
             //Restart loop until it gets a valid position
             theCat.setXCoordinate(lastCatX);
@@ -154,7 +154,7 @@ char Control::mouseMove()
     {
         //He is not starving for another 100 turns
         theMouse.resetFoodCount();
-        mapArray[mouseY][mouseX] == ' ';
+        mapArray[mouseY][mouseX] = ' ';
         return 'F';
     }
     else if (mapArray[mouseY][mouseX] == 'H')
@@ -355,7 +355,7 @@ void Control::printScreen()
         int const GAME_WINDOW_HEIGHT = mapHeight;
         int const GAME_WINDOW_WIDTH = mapWidth;
         int const STATUS_WINDOW_HEIGHT = 15;
-        int const STATUS_WINDOW_WIDTH = 35;
+        int const STATUS_WINDOW_WIDTH = 50;
 
         initscr();
         curs_set(0); //set visibility of cursor
@@ -407,39 +407,60 @@ void Control::printScreen()
     char * stringPointer = &printedLine.at(0);
     mvwprintw(information,0,1,stringPointer);
 
-    printedLine = "Current Run";
+    //Print current run and it's number
+    printedLine = "Current Run:";
     int printedNumber = currentRunNumber;
+    stringPointer = &printedLine.at(0);
     mvwprintw(information,1,1,stringPointer);
     mvwprintw(information,1,14,"%d",printedNumber);
 
+    //Print the total number of runs needed
     printedLine = "Total Runs";
     printedNumber = totalSimulationRuns;
+    stringPointer = &printedLine.at(0);
     mvwprintw(information,2,1,stringPointer);
     mvwprintw(information,2,14,"%d",printedNumber);
 
+    //Print the current food counter
     printedLine = "Food Count";
     printedNumber = theMouse.getFoodCount();
+    stringPointer = &printedLine.at(0);
     mvwprintw(information,3,1,stringPointer);
     mvwprintw(information,3,14,"%d",printedNumber);
 
+    //Obituaries
     printedLine = "Deaths:";
     mvwprintw(information,5,1,stringPointer);
 
+    //Deathes by Cat
     printedLine = "Cat";
     printedNumber = deathByCat;
+    stringPointer = &printedLine.at(0);
     mvwprintw(information,6,1,stringPointer);
     mvwprintw(information,6,14,"%d",printedNumber);
 
+    //Deathes by lack of Slim Jims
     printedLine = "Starvation";
     printedNumber = deathByStarvation;
+    stringPointer = &printedLine.at(0);
     mvwprintw(information,7,1,stringPointer);
     mvwprintw(information,7,14,"%d",printedNumber);
 
+    //Death by Water Slides
     printedLine = "Drowning";
     printedNumber = deathByDrowning;
+    stringPointer = &printedLine.at(0);
     mvwprintw(information,8,1,stringPointer);
     mvwprintw(information,8,14,"%d",printedNumber);
 
+    //FREEDOM
+    printedLine = "Escapes";
+    printedNumber = mouseVictory;
+    stringPointer = &printedLine.at(0);
+    mvwprintw(information,9,1,stringPointer);
+    mvwprintw(information,9,14,"%d",printedNumber);
+
+    //Refresh both windows
     wrefresh(information);
     wrefresh(gameWindow);
 
@@ -493,6 +514,7 @@ void Control::writeToFile()
 Control::~Control()
 {
     //Destructor
+    std::cout << "Data is saved to result.txt in the directory of the source code." << std::endl;
 }
 
 void wait(int sec) //credit to http://www.cplusplus.com/forum/beginner/74239/
@@ -503,4 +525,11 @@ void wait(int sec) //credit to http://www.cplusplus.com/forum/beginner/74239/
     return;
 }
 
-
+void Control::testFileFunctions()
+{
+    readFile();
+    printScreen();
+    writeToFile();
+    wait(10);
+    return;
+}

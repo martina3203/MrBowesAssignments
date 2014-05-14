@@ -27,6 +27,7 @@ public:
     char mouseMove();
     void saveInformation(std::string theMap, int numberOfRuns,int height,int width);
     void terminateProgram();
+    void testFileFunctions();
     ~Control();
 
 private:
