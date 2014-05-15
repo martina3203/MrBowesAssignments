@@ -61,8 +61,8 @@ pongBall::pongBall(SDL_Layout & theLayout)
     //Adds ball to screen
     SDL_RenderFillRect(theLayout.getMainRenderer(),&theRectangle);
 
-    xVelocity = 3;
-    yVelocity = 1;
+    xVelocity = 1;
+    yVelocity = 0;
 }
 
 //Destructor
@@ -102,10 +102,27 @@ void pongBall::checkCollision(pongPaddle thePaddle)
 
     //If it hits the paddle
     if (((thePaddle.returnXPosition() >= theRectangle.x) && ((thePaddle.returnXPosition()-13) <= theRectangle.x)) &&
-        ((thePaddle.returnYPosition() <= theRectangle.y) && ((thePaddle.returnYPosition()+thePaddle.returnWidth()) >= theRectangle.y)))
+        ((thePaddle.returnYPosition() <= (theRectangle.y+5)) && ((thePaddle.returnYPosition()+thePaddle.returnWidth()) >= (theRectangle.y-5))))
     {
         xVelocity = xVelocity - (2 * xVelocity);
+        if (xVelocity < 0)
+        {
+            if (xVelocity > -3)
+            {
+                xVelocity--;
+                yVelocity = 1;
+            }
+        }
+        else
+        {
+            if (xVelocity < 3)
+            {
+                xVelocity++;
+                yVelocity = 1;
+            }
+        }
     }
+
 
     return;
 }
@@ -114,6 +131,8 @@ void pongBall::resetBall()
 {
     theRectangle.x = (arenaWidth/2);
     theRectangle.y = (arenaHeight/2);
+    xVelocity = 2;
+    yVelocity = 1;
     return;
 }
 
