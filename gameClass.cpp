@@ -65,7 +65,7 @@ void gameClass::startGame(int numberCode)
     {
         drawWindow();
         updateCells();
-        wait(6);
+        wait(1);
     }
 
 
