@@ -17,6 +17,7 @@ class cell
 public:
     cell();
     void makeAlive();
+    void makeChange();
     void checkAlive();
     void setX(int x);
     void setY(int y);
@@ -30,6 +31,7 @@ public:
 private:
     int xCoordinate;
     int yCoordinate;
+    bool change;
     cellState currentState;
 
     cell * topLeftPointer;

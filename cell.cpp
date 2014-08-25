@@ -4,6 +4,7 @@ cell::cell()
 {
     //Constructor
     currentState = dead;
+    change = false;
     topLeftPointer = NULL;
     topCenterPointer = NULL;
     topRightPointer = NULL;
@@ -19,6 +20,24 @@ void cell::makeAlive()
 {
     currentState = alive;
 }
+
+void cell::makeChange()
+{
+    if (change == true)
+    {
+        if (currentState == alive)
+        {
+            currentState = dead;
+        }
+        else
+        {
+            currentState = alive;
+        }
+    }
+
+    change = false;
+}
+
 
 //Toggles cell from being dead or alive
 void cell::checkAlive()
@@ -65,12 +84,26 @@ void cell::checkAlive()
     if ((surroundingLiveCells == 2) || (surroundingLiveCells == 3))
     {
         //If there is 2 or 3 neighbors, there are alive.
-        currentState = alive;
+        if (currentState == alive)
+        {
+            change = false;
+        }
+        else
+        {
+            change = true;
+        }
     }
     else
     {
         //If there is more than 3, there are dead.
-        currentState = dead;
+        if (currentState == alive)
+        {
+            change = true;
+        }
+        else
+        {
+            change = false;
+        }
     }
     return;
 }
