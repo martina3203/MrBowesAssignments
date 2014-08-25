@@ -65,7 +65,7 @@ void gameClass::startGame(int numberCode)
     {
         drawWindow();
         updateCells();
-        wait(3);
+        wait(6);
     }
 
 
@@ -76,12 +76,7 @@ void gameClass::updateCells()
     //Checks the status of the current cells
     for (unsigned int i = 0; i < cellList.size(); i++)
     {
-            cellList.at(i) -> checkAlive();
-    }
-
-    for (unsigned int i = 0; i < cellList.size(); i++)
-    {
-        cellList.at(i) -> makeChange();
+        cellList.at(i) -> checkAlive();
     }
     calculateCount();
     return;
