@@ -1,4 +1,5 @@
 #include "gameClass.h"
+#include <stdlib.h>
 
 gameClass::gameClass()
 {
@@ -60,14 +61,13 @@ void gameClass::startGame(int numberCode)
             }
         }
     }
+
     calculateCount();
+    sortAlive();
     while(1)
     {
-        drawWindow();
         updateCells();
-        wait(3);
     }
-
 
 }
 
@@ -76,13 +76,28 @@ void gameClass::updateCells()
     //Checks the status of the current cells
     for (unsigned int i = 0; i < cellList.size(); i++)
     {
-            cellList.at(i) -> checkAlive();
-    }
+        if (cellList.at(i) -> returnState() == alive)
+        {
+            for (unsigned int h = 1; h < 10; h++)
+            {
+                if (h != 5)
+                {
+                    cell * targetCell = cellList.at(i) -> returnAdjacentCell(h);
+                    if (targetCell != NULL)
+                    {
+                        targetCell -> checkAlive();
+                        targetCell -> makeChange();
+                        drawWindow();
 
-    for (unsigned int i = 0; i < cellList.size(); i++)
-    {
-        cellList.at(i) -> makeChange();
+                    }
+                }
+            }
+            _sleep(1);
+            cellList.at(i) -> checkAlive();
+            cellList.at(i) -> makeChange();
+        }
     }
+    sortAlive();
     calculateCount();
     return;
 }
@@ -133,7 +148,11 @@ void gameClass::drawWindow()
     {
         if (cellList.at(i) -> returnState() == alive)
         {
-            mvwaddch(gameWindow,cellList.at(i)->returnY(),cellList.at(i)->returnX(),'A');
+            if (((cellList.at(i) -> returnX() >= 0) && (cellList.at(i) -> returnX() <= GAME_WINDOW_WIDTH)) &&
+                ((cellList.at(i) -> returnY() >= 0) && cellList.at(i) -> returnY() <= GAME_WINDOW_HEIGHT))
+                {
+                    mvwaddch(gameWindow,cellList.at(i)->returnY(),cellList.at(i)->returnX(),'A');
+                }
         }
     }
 
@@ -159,12 +178,13 @@ void gameClass::drawWindow()
     return;
 }
 
+//Creates intial cells
 void gameClass::createCells()
 {
     //Create enough cells to fill the current game window settings
-    for (unsigned int i = 0; i < GAME_WINDOW_HEIGHT; i++)
+    for (int i = 0; i < (GAME_WINDOW_HEIGHT+10); i++)
     {
-        for (unsigned int h = 0; h < GAME_WINDOW_WIDTH; h++)
+        for (int h = 0; h < (GAME_WINDOW_WIDTH+10); h++)
         {
             //Create cell
             cell * cellPointer = new cell;
@@ -181,6 +201,30 @@ void gameClass::createCells()
     {
         cellList.at(i) -> connectCells(cellList);
     }
+    return;
+}
+
+void gameClass::sortAlive()
+{
+    std::vector<cell*> newList;
+    //Sorts alive cells to front
+    for (unsigned int i = 0; i < cellList.size(); i++)
+    {
+        if (cellList.at(i) -> returnState() == alive)
+        {
+            newList.push_back(cellList.at(i));
+        }
+    }
+    //Then adds dead cells to back of list
+    for (unsigned int i = 0; i < cellList.size(); i++)
+    {
+        if (cellList.at(i) -> returnState() == dead)
+        {
+            newList.push_back(cellList.at(i));
+        }
+    }
+    //Copies over new list
+    cellList = newList;
     return;
 }
 

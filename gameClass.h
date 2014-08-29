@@ -15,6 +15,7 @@ public:
     ~gameClass();
     void drawWindow();
     void createCells();
+    void sortAlive();
     void startGame(int numberCode);
     void updateCells();
     void calculateCount();

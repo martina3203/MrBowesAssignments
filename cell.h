@@ -19,6 +19,7 @@ public:
     void makeAlive();
     void makeChange();
     void checkAlive();
+    void checkAdjacent();
     void setX(int x);
     void setY(int y);
     int returnX();

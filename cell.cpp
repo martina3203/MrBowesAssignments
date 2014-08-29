@@ -38,7 +38,51 @@ void cell::makeChange()
     change = false;
 }
 
+//Checks neighbor cells to see if they are alive
+void cell::checkAdjacent()
+{
+    if(topLeftPointer != NULL)
+    {
+        topLeftPointer -> checkAlive();
+        topLeftPointer -> makeChange();
+    }
+    if(topRightPointer != NULL)
+    {
+        topRightPointer -> checkAlive();
+        topRightPointer -> makeChange();
+    }
+    if(topCenterPointer != NULL)
+    {
+        topCenterPointer -> checkAlive();
+        topCenterPointer -> makeChange();
+    }
+    if(leftCenterPointer != NULL)
+    {
+        leftCenterPointer -> checkAlive();
+        leftCenterPointer -> makeChange();
+    }
+    if(rightCenterPointer != NULL)
+    {
+        rightCenterPointer -> checkAlive();
+        rightCenterPointer -> makeChange();
+    }
+    if(bottomLeftPointer != NULL)
+    {
+        bottomLeftPointer -> checkAlive();
+        bottomLeftPointer -> makeChange();
+    }
+    if(bottomCenterPointer != NULL)
+    {
+        bottomCenterPointer -> checkAlive();
+        bottomCenterPointer -> makeChange();
+    }
+    if(bottomRightPointer != NULL)
+    {
+        bottomRightPointer -> checkAlive();
+        bottomRightPointer -> makeChange();
+    }
 
+}
 //Toggles cell from being dead or alive
 void cell::checkAlive()
 {
@@ -88,7 +132,7 @@ void cell::checkAlive()
         {
             change = false;
         }
-        else
+        if (currentState == dead && surroundingLiveCells == 3)
         {
             change = true;
         }
