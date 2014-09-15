@@ -87,31 +87,79 @@ customer singleLink::Remove()
     customer returnedCustomer;
     if (headNode == NULL)
     {
+        //std::cout << "List is Empty";
         //Nothing
-        std::cout << "Head Node Doesn't eXit";
         headNode = NULL;
         return returnedCustomer;
     }
     else
     {
         Node * traverseNode = headNode;
-        Node * previousNode = NULL;
+        if (traverseNode -> returnNextPointer() == NULL)
+        {
+            returnedCustomer = headNode -> returnData();
+            delete headNode;
+            headNode = NULL;
+            return returnedCustomer;
+        }
+
+        while(traverseNode -> returnNextPointer() -> returnNextPointer() != NULL)
+        {
+            traverseNode = traverseNode -> returnNextPointer();
+        }
+
+        returnedCustomer = traverseNode -> returnData();
+        traverseNode -> setNextPointer(NULL);
+        return returnedCustomer;
 
     }
-        return returnedCustomer;
 }
 
 
 std::vector<customer> singleLink::returnVector()
 {
+
     std::vector<customer> returnedVector;
     Node * traverseNode = headNode;
+
     while(traverseNode != NULL)
     {
-        customer currentCustomer = traverseNode -> returnData();
-        returnedVector.push_back(currentCustomer);
+        //std::cout << "Ok";
+        //customer currentCustomer = traverseNode -> returnData();
         traverseNode = traverseNode -> returnNextPointer();
     }
 
     return returnedVector;
+}
+
+void singleLink::updateTime()
+{
+    if (headNode != NULL)
+    {
+        Node * traverseNode = headNode;
+        while (traverseNode != NULL)
+        {
+            customer currentCustomer = traverseNode -> returnData();
+            currentCustomer.incrementWaitTime();
+            traverseNode -> setData(currentCustomer);
+            traverseNode = traverseNode -> returnNextPointer();
+        }
+    }
+    return;
+}
+
+int singleLink::returnSize()
+{
+    int counter = 0;
+    if (headNode != NULL)
+    {
+        Node * traverseNode = headNode;
+        while(traverseNode != NULL)
+        {
+            counter++;
+            traverseNode = traverseNode -> returnNextPointer();
+        }
+    }
+
+    return counter;
 }

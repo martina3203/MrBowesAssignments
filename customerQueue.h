@@ -18,6 +18,7 @@ class customerQueue
         virtual ~customerQueue();
     protected:
     private:
+        singleLink theList;
 
 };
 
@@ -29,12 +30,14 @@ class queueSimulation
 public:
     queueSimulation();
     ~queueSimulation();
+    void executeAll(bool normalServiceTime = true);
     void executeOneCashier(bool normalServiceTime = true);
-    void executeMultiEverything();
-    void executeMultiRegister();
+    void executeMultiEverything(bool normalServiceTime = true);
+    void executeMultiRegister(bool normalServiceTime = true);
     //1 is for One Cashier information, 2 is for MultiEverything, 3 is for MultiRegister
     void printChart(int queueCode);
-    void updateStats(int queueCode,customerQueue targetList);
+    void updateStats(int queueCode,std::vector<customer> savedVector);
+    void resetStats();
 private:
     int totalTimeOneCashier;
     int totalTimeMultiEverything;
@@ -48,6 +51,14 @@ private:
     int maxWaitTimeOneCashier;
     int maxWaitTimeMultiEverything;
     int maxWaitTimeMultiRegister;
+
+    //Max Values
+    int mostCustomersCompleted;
+    int CMCode = 0;
+    int bestAverageWait;
+    int BACode = 0;
+    int worstWaitTime;
+    int WWCode = 0;
 };
 
 #endif // CUSTOMERQUEUE_H
