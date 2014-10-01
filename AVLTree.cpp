@@ -237,3 +237,23 @@ void AVLTree::interface()
     }
     return;
 }
+
+
+node* AVLTree::findPreviousNode(node * targetNode, node * currentNode)
+{
+    node * traverseNode = currentNode;
+    if (traverseNode == targetNode)
+    {
+        return traverseNode;
+    }
+    else if (traverseNode -> returnLeftPointer() == targetNode)
+    {
+        return traverseNode;
+    }
+    else if (traverseNode -> returnRightPointer() == targetNode)
+    {
+        return traverseNode;
+    }
+    findPreviousNode(targetNode,traverseNode -> returnLeftPointer());
+    findPreviousNode(targetNode,traverseNode -> returnRightPointer());
+}
