@@ -1,22 +1,10 @@
 #include "BinaryTree.h"
+#include "AVLTree.h"
 
 int main()
 {
-    BinaryTree newTree;
-    newTree.addToTree(19);
-    newTree.addToTree(19);
-    newTree.addToTree(40);
-    newTree.addToTree(15);
-    newTree.addToTree(12);
-    newTree.addToTree(25);
-    newTree.addToTree(18);
-    newTree.addToTree(1);
-    newTree.addToTree(100);
-    newTree.addToTree(60);
-
-    //Change the number to receive the print order:
-    //1 for In-Order, 2 for pre-order, 3 for post-order, 4 for Groot
-    newTree.printTree(2);
+    AVLTree newTree;
+    newTree.interface();
 }
 
 

@@ -97,29 +97,52 @@ int AVLTree::checkBalance(node * thePointer)
 
         if (returnValue == 2)
         {
-            if (checkBalance(thePointer -> returnRightPointer()) == -1)
+            if (checkBalance(thePointer -> returnLeftPointer()) == -1)
             {
                 std::cout << "Perform Double Right" << std::endl;
-                thePointer -> setRightPointer(leftRotate(thePointer->returnRightPointer()));
+                if (thePointer == headNode)
+                {
+                    headNode = leftRotate(thePointer);
+                }
+                else
+                {
+                    thePointer = rightRotate(thePointer);
+                }
             }
             std::cout << "Right Rotation" << std::endl;
             if (thePointer == headNode)
             {
                 headNode = rightRotate(thePointer);
             }
+            else
+            {
+                rightRotate(thePointer);
+            }
         }
         else if (returnValue == -2)
         {
-            if (checkBalance(thePointer -> returnLeftPointer()) == 1)
+            if (checkBalance(thePointer -> returnRightPointer()) == 1)
             {
                 std::cout << "Perform Double Left" << std::endl;
-                thePointer = rightRotate(thePointer);
+                if (thePointer == headNode)
+                {
+                    headNode = rightRotate(thePointer);
+                }
+                else
+                {
+                    thePointer = rightRotate(thePointer);
+                }
             }
             std::cout << "Left Rotation" << std::endl;
             if (thePointer == headNode)
             {
                 headNode = leftRotate(thePointer);
             }
+            else
+            {
+                thePointer = leftRotate(thePointer);
+            }
+
         }
         return returnValue;
     }

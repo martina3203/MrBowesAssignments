@@ -1,7 +1,7 @@
 #ifndef AVLTREE_H
 #define AVLTREE_H
 
-#include <BinaryTree.h>
+#include "BinaryTree.h"
 
 
 class AVLTree : public BinaryTree
@@ -16,6 +16,7 @@ class AVLTree : public BinaryTree
         int returnHeight(node * thePointer);
         int deleteNode(int target, node * thePointer);
         void interface();
+        node * findPreviousNode(node * targetNode, node * currentNode);
     protected:
     private:
         node * findSmallestNode(node* thePointer,int &depth);
