@@ -36,7 +36,7 @@ class BinaryTree
         virtual void addToBranches(node * thePointer, int newData);
         node * headNode;
         void printTree(int code);
-        void interface();
+        virtual void interface();
     protected:
 
     private:

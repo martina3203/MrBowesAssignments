@@ -13,8 +13,12 @@ class AVLTree : public BinaryTree
         node * rightRotate(node * thePointer);
         void addToTree(int);
         int checkBalance(node * thePointer);
+        int returnHeight(node * thePointer);
+        int deleteNode(int target, node * thePointer);
+        void interface();
     protected:
     private:
+        node * findSmallestNode(node* thePointer,int &depth);
 };
 
 #endif // AVLTREE_H
