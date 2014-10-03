@@ -1,5 +1,5 @@
 #include "Sorts.h"
-
+#include "Heap.h"
 
 int main()
 {
@@ -13,7 +13,21 @@ int main()
     //bubbleSort(10,magicArray);
     //shellSort(10,magicArray);
     //quickSort(0,9,magicArray);
-    mergeSort(magicVector);
+    //mergeSort(magicVector);
+    heapSort(10,magicArray);
+
+    Heap newHeap; newHeap.Insert(5); newHeap.Insert(6); newHeap.Insert(3); newHeap.Insert(9);
+    newHeap.Insert(5); newHeap.Insert(11); newHeap.Insert(1);
+    newHeap.printHeap();
+    newHeap.Delete();
+    newHeap.printHeap();
+
+    /*
+    PriorityQueue newQueue; newQueue.Insert(10); newQueue.Insert(3); newQueue.Insert(15);
+    newQueue.printQueue();
+    newQueue.Delete();  newQueue.Delete(); newQueue.Delete();
+    newQueue.printQueue();
+    */
 
     printArray(10,magicArray);
     return 1;
@@ -170,10 +184,17 @@ int QSPartition(int firstPosition,int lastPosition, int theArray[])
     return leftInterator;
 }
 
+//NOt Finished
 std::vector<int> mergeSort(std::vector<int> targetVector)
 {
-    //For assistance
+    //For assistance in finding a recursive method
     //https://www.princeton.edu/~achaney/tmve/wiki100k/docs/Merge_sort.html
+
+    if (targetVector.size() <= 1)
+    {
+        //Return this as this is the smallest it can get
+        return targetVector;
+    }
 
     int middlePoint = targetVector.size()/2;
 
@@ -182,23 +203,54 @@ std::vector<int> mergeSort(std::vector<int> targetVector)
     std::vector<int> result;
 
     //Fill Left Vector
-    for (unsigned int i = 0; i <= middlePoint; i++)
+    for (unsigned int i = 0; i < middlePoint; i++)
     {
-        leftVector.push_back(i);
+        leftVector.push_back(targetVector.at(i));
     }
     //Fill Right Vector
-    for (unsigned int i = middlePoint+1; i < targetVector.size(); i++)
+    for (unsigned int i = middlePoint; i < targetVector.size(); i++)
     {
-        rightVector.push_back(i);
+        rightVector.push_back(targetVector.at(i));
     }
-
-
 
     leftVector = mergeSort(leftVector);
     rightVector = mergeSort(rightVector);
+    result = Merge(leftVector,rightVector);
 
+    printVector(result);
 
     return result;
+}
+
+std::vector<int> Merge(std::vector<int> leftVector, std::vector<int> rightVector)
+{
+    std::vector<int> result;
+
+    //while (leftVector.size() == )
+
+    return result;
+}
+
+void heapSort(int arraySize, int theArray[])
+{
+    Heap theHeap;
+    //LOAD ALL THESE BAD ******** INTO AN ARRAY
+    for (unsigned int i = 0; i < arraySize; i++)
+    {
+        //EXPLOSIIONS!!!!!!!!
+        theHeap.Insert(theArray[i]);
+    }
+    //PLACE THEM BACK INTO THE ARRAY
+    for (unsigned int i = 0; i < arraySize; i++)
+    {
+        theArray[i] = theHeap.Delete();
+    }
+    return;
+}
+
+void bucketSort(int arraySize,int theArray[])
+{
+
 }
 
 //Prints the contents of an array
@@ -209,6 +261,16 @@ void printArray(int arraySize,int theArray[])
     {
         std::cout << theArray[i] << " ";
     }
+    return;
+}
+
+void printVector(std::vector<int> targetVector)
+{
+    for (unsigned int i = 0; i < targetVector.size(); i++)
+    {
+        std::cout << targetVector.at(i) << " ";
+    }
+    std::cout << std::endl;
     return;
 }
 

@@ -18,7 +18,7 @@ int QSPartition(int firstPosition,int lastPosition, int theArray[]);
 
 std::vector<int> mergeSort(std::vector<int> targetVector);
 
-//void Merge();
+std::vector<int> Merge(std::vector<int> leftVector, std::vector<int> rightVector);
 
 void heapSort(int arraySize,int theArray[]);
 
@@ -26,6 +26,7 @@ void bucketSort(int arraySize,int theArray[]);
 
 void printArray(int arraySize,int theArray[]);
 
+void printVector(std::vector<int> targetVector);
 
 void SwapValues(int firstPosition, int secondPosition, int theArray[]);
 
