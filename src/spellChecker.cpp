@@ -3,7 +3,6 @@
 Node::Node()
 {
     storedCharacter = ' ';
-    wordCompleted = false;
     //Set all the pointers to NULL
     for (int i = 0; i < 26; i++)
     {
@@ -228,16 +227,7 @@ void Node::setPointer(char input,Node * newPointer)
     }
 }
 
-bool Node::returnWordCompleted()
-{
-    return wordCompleted;
-}
 
-void Node::setWordCompleted(bool status)
-{
-    wordCompleted = status;
-    return;
-}
 
 spellChecker::spellChecker()
 {
@@ -254,75 +244,17 @@ spellChecker::~spellChecker()
 
 void spellChecker::execute()
 {
-    std::string input;
-    compileDictionary();
-    while (input != "QUIT")
-    {
-        std::cout << "Type in a word to be checked" << std::endl;
-        std::cin >> input;
-        if (input != "QUIT")
-        {
-            checkWord(input);
-        }
-    }
-    cleanUpNodes(headNode);
+
 }
 
-bool spellChecker::compileDictionary()
+void spellChecker::compileDictionary()
 {
-    std::fstream outputFile;
-    std::string currentWord;
-    outputFile.open("dictionary.txt");
-    if (outputFile.is_open() != false)
-    {
-        std::cout << "Dictionary Loaded" << std::endl;
-        //While there is still words in the file
-        while (outputFile >> currentWord)
-        {
-            Node * traverse = headNode;
-            Node * newNode;
-            //For every letter in the word
-            for (int i = 0; i < currentWord.size(); i++)
-            {
-                //Add it's letter as a node, if it doesn't already exist
-                if (traverse -> returnPointer(currentWord.at(i)) == NULL)
-                {
-                    newNode = new Node;
-                    newNode -> changeStoredCharacter(currentWord.at(i));
-                    traverse -> setPointer(currentWord.at(i),newNode);
-                    traverse = newNode;
-                    //If we are at the last letter
-                    if (i+1 == currentWord.size())
-                    {
-                        newNode -> setWordCompleted(true);
-                    }
-                }
-                //Else we simply move on to the next letter and update the pointer
-                else
-                {
-                    traverse = traverse -> returnPointer(currentWord.at(i));
-                    if (i+1 == currentWord.size())
-                    {
-                        newNode -> setWordCompleted(true);
-                    }
-                }
-            }
-        }
-    }
-    else
-    {
-        std::cout << "Failed to load Dictionary" << std::endl;
-        //File was not read
-        return false;
-    }
-    outputFile.close();
-    return true;
+
 }
 
 void spellChecker::checkWord(std::string word)
 {
     Node * traverse = headNode;
-    bool wordExists = false;
     std::vector<std::string> spellSuggestions;
     std::string workingString;
     //Traverse through the string to find out which, if any, letters are missing
@@ -334,12 +266,6 @@ void spellChecker::checkWord(std::string word)
             //Add letter to working string
             workingString.push_back(word.at(i));
             traverse = traverse -> returnPointer(word.at(i));
-            //If we are at the end of the word
-            if ((i+1 == word.size()) && (traverse -> returnWordCompleted() == true))
-            {
-                //Set the truth flag
-                wordExists = true;
-            }
         }
         else
         {
@@ -350,55 +276,10 @@ void spellChecker::checkWord(std::string word)
     }
 
     //This is where we compile suggestions for the user
-    if (wordExists == false)
+    while (spellSuggestions.size() < 10)
     {
-        //Starting from the error
-        traverse = beforeSpellError;
-        char currentLetter = 'a';
-        for (int i = 0; i < 26; i++)
-        {
-            if (traverse -> returnPointer(currentLetter) != NULL)
-            {
-                if (traverse -> returnPointer(currentLetter) -> returnWordCompleted() == true)
-                {
-                    spellSuggestions.push_back(workingString + currentLetter);
-                }
-            }
-            currentLetter++;
-        }
+        //Using Working string as a template
+        //Travel through all he adjacent valid nodes and build new strings to print
 
-        //Then we print all suggestions
-        std::cout << "Suggestions:" << std::endl;
-        for (int i = 0; i < spellSuggestions.size(); i++)
-        {
-            std::cout << spellSuggestions.at(i) << std::endl;
-        }
-    }
-    else
-    {
-        std::cout << "This word exists." << std::endl;
     }
 }
-
-void spellChecker::cleanUpNodes(Node * targetNode)
-{
-    if (targetNode != NULL)
-    {
-        char currentLetter = 'a';
-        //Cycles through every letter and deletes every node as it goes
-        for (int i = 0; i < 26; i++)
-        {
-            //If there is something in that node
-            if (targetNode -> returnPointer(currentLetter) != NULL)
-            {
-                //Clean it and it's children
-                cleanUpNodes(targetNode -> returnPointer(currentLetter));
-            }
-            currentLetter++;
-        }
-        delete targetNode;
-        targetNode = NULL;
-        return;
-    }
-}
-
