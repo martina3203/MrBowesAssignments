@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -22,6 +23,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -31,6 +33,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="include/adjancyMatrix.h" />
+		<Unit filename="include/vertex.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/adjancyMatrix.cpp" />
+		<Unit filename="src/vertex.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
