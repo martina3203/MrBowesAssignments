@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1415244738 source:c:\users\blackie\desktop\programming projects\graphs\src\adjancymatrix.cpp
+	"adjancyMatrix.h"
+
+1415245535 c:\users\blackie\desktop\programming projects\graphs\include\adjancymatrix.h
+	"vertex.h"
+
+1415245164 c:\users\blackie\desktop\programming projects\graphs\include\vertex.h
+	<string>
+	<vector>
+
+1415245255 source:c:\users\blackie\desktop\programming projects\graphs\src\vertex.cpp
+	"vertex.h"
+
+1415243206 source:c:\users\blackie\desktop\programming projects\graphs\main.cpp
+	"adjancyMatrix.h"
+

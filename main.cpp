@@ -1,7 +1,7 @@
-#include "spellChecker.h"
+#include "adjancyMatrix.h"
 
 int main()
 {
-    spellChecker theSpeller200;
-    theSpeller200.execute();
+    adjancyMatrix newGraph;
+    return 1;
 }
