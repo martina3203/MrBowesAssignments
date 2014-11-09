@@ -71,6 +71,7 @@ void adjancyMatrix::addVertex(std::string newVertex)
                     matrix[(i * verticeList.size()) + verticeList.size()-1] = 1;
                 }
                 std::cout << "Connection Added" << std::endl;
+                break;
             }
             else if (i == verticeList.size()-2)
             {
