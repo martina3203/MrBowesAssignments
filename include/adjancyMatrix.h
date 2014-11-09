@@ -11,11 +11,15 @@ class adjancyMatrix
         adjancyMatrix();
         virtual ~adjancyMatrix();
         void addVertex(std::string);
-        void removeVertex(std::string targetVertex);
+        void removeVertex(std::string);
+        void breadthFirst(std::string);
+        void depthFirst(std::string);
         void printVertices();
     protected:
     private:
         void rebuildMatrix();
+        void depthTraverse(int);
+        void breadthTraverse(int);
         std::vector<vertex*> verticeList;
         int * matrix;
         bool directed;

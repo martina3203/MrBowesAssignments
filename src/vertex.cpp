@@ -2,6 +2,7 @@
 
 vertex::vertex()
 {
+    visited = false;
     X = 0;
     Y = 0;
 }
@@ -29,6 +30,16 @@ std::vector<vertex*> vertex::returnAdjacentList()
 void vertex::clearList()
 {
     adjacentList.clear();
+}
+
+bool vertex::wasVisited()
+{
+    return visited;
+}
+
+void vertex::setVisitFlag(bool newState)
+{
+    visited = newState;
 }
 
 vertex::~vertex()

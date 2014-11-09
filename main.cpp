@@ -7,8 +7,8 @@ int main()
     newGraph.addVertex("Poop");
     newGraph.addVertex("Chicken");
     newGraph.addVertex("Waka");
+    //newGraph.depthFirst("Poop");
     newGraph.printVertices();
-    newGraph.removeVertex("Poop");
-    newGraph.printVertices();
+    newGraph.breadthFirst("Chicken");
     return 1;
 }

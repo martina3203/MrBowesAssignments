@@ -141,6 +141,102 @@ void adjancyMatrix::removeVertex(std::string targetVertex)
     return;
 }
 
+void adjancyMatrix::breadthFirst(std::string start)
+{
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        //If we find the start node
+        if (verticeList.at(i) -> returnName() == start)
+        {
+            //Starting with this node
+            std::vector<vertex*> masterList;
+            masterList.push_back(verticeList.at(i));
+            int savedLocation = i;
+            for (int q = 0; q < masterList.size(); q++)
+            {
+                std::cout << masterList.at(q) -> returnName() << " -> ";
+                masterList.at(q) -> setVisitFlag(true);
+                //Find actual location in list
+                for (int d = 0; d < verticeList.size(); d++)
+                {
+                    if (verticeList.at(d) == masterList.at(q))
+                    {
+                        savedLocation = d;
+                    }
+                }
+                //For every column in that list
+                for (int h = 0; h < verticeList.size(); h++)
+                {
+                    //If there is a connection here
+                    if (matrix[(savedLocation*verticeList.size())+h] != 0)
+                    {
+                        if (verticeList.at(h) -> wasVisited() == false)
+                        {
+                            masterList.push_back(verticeList.at(h));
+                        }
+                    }
+                }
+            }
+            std::cout << "END" << std::endl;
+            //Reset visit flag for future traversals
+            for (int h = 0; h < verticeList.size(); h++)
+            {
+                verticeList.at(i) -> setVisitFlag(false);
+            }
+            break;
+        }
+        //This is in case the vertex doesn't exist
+        else if (i == verticeList.size()-1)
+        {
+            std::cout << "Vertex not found. Cannot traverse." << std::endl;
+        }
+    }
+}
+
+void adjancyMatrix::depthFirst(std::string start)
+{
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        //If we find the start node
+        if (verticeList.at(i) -> returnName() == start)
+        {
+            depthTraverse(i);
+            std::cout << "END" << std::endl;
+            //Reset for future traversals
+            for (int h = 0; h < verticeList.size(); h++)
+            {
+                verticeList.at(i) -> setVisitFlag(false);
+            }
+            break;
+        }
+        //This is in case the vertex doesn't exist
+        else if (i == verticeList.size()-1)
+        {
+            std::cout << "Vertex not found. Cannot traverse." << std::endl;
+        }
+    }
+    return;
+}
+
+void adjancyMatrix::depthTraverse(int rowNumber)
+{
+    std::cout << verticeList.at(rowNumber) -> returnName() << " -> ";
+    verticeList.at(rowNumber) -> setVisitFlag(true);
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        //If there is a connection here
+        if (matrix[(rowNumber*verticeList.size())+i] != 0)
+        {
+            //If this wasn't visited yet
+            if (verticeList.at(i) -> wasVisited() == false)
+            {
+                depthTraverse(i);
+            }
+        }
+    }
+    return;
+}
+
 void adjancyMatrix::rebuildMatrix()
 {
     //This simply resets the state of the array
