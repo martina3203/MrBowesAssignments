@@ -25,20 +25,11 @@ void adjancyMatrix::addVertex(std::string newVertex)
                 }
             }
         }
-        delete matrix;
     }
     vertex * tempVertex = new vertex;
     tempVertex -> setName(newVertex);
     verticeList.push_back(tempVertex);
-
-    //Found on stack overflow. Make a single dimensional array with X * Y spots.
-    //When accessing it's DesiredRow * #OfColumns + DesiredColumn
-    int arraySize = verticeList.size() * verticeList.size();
-    matrix = new int [arraySize];
-    for (int i = 0; i < arraySize; i++)
-    {
-        matrix[i] = 0;
-    }
+    rebuildMatrix();
     //Copy everything over again
     for (int row = 0; row < verticeList.size()-1; row++)
     {
@@ -54,6 +45,8 @@ void adjancyMatrix::addVertex(std::string newVertex)
                     break;
                 }
             }
+            //Clear up the adjancy list of all vertices for future usage
+            verticeList.at(row) -> clearList();
         }
     }
 
@@ -83,7 +76,77 @@ void adjancyMatrix::addVertex(std::string newVertex)
 
 void adjancyMatrix::removeVertex(std::string targetVertex)
 {
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        if (verticeList.at(i) -> returnName() == targetVertex)
+        {
+            vertex * currentVertex = verticeList.at(i);
+            //Save a copy of the matrix
+            for (int i = 0; i < verticeList.size(); i++)
+            {
+                for (int h = 0; h < verticeList.size(); h++)
+                {
+                    //If there is a connection between these two vertices
+                    if (matrix[i * verticeList.size() + h] != 0)
+                    {
+                        //Save in that list if it's not the vertex being deleted
+                        if (verticeList.at(h) -> returnName() != targetVertex)
+                        {
+                            verticeList.at(i) -> addToAdjacentList(verticeList.at(h));
+                        }
+                    }
+                }
+            }
+            //Remove and copy everything over by a node into the list
+            for (int h = i; h < verticeList.size()-1; h++)
+            {
+                //Move up the list
+                verticeList.at(h) = verticeList.at(h+1);
+            }
+            delete currentVertex;
+            currentVertex = NULL;
+            verticeList.pop_back();
+            //Copy matrix back over
+            rebuildMatrix();
+            for (int row = 0; row < verticeList.size(); row++)
+            {
+                std::vector<vertex*> adjacent = verticeList.at(row) -> returnAdjacentList();
+                for (int column = 0; column < verticeList.size(); column++)
+                {
+                    //For the adjacent list
+                    for (int j = 0; j < adjacent.size(); j++)
+                    {
+                        if (adjacent.at(j) == verticeList.at(column))
+                        {
+                            matrix[row * verticeList.size() + column] = 1;
+                            break;
+                        }
+                    }
+                    //Clear up the adjancy list of all vertices for future usage
+                    verticeList.at(row) -> clearList();
+                }
+            }
+            return;
+        }
+    }
+    std::cout << "Vertex doesn't exist";
+    return;
+}
 
+void adjancyMatrix::rebuildMatrix()
+{
+    //This simply resets the state of the array
+    delete matrix;
+    matrix = NULL;
+
+    //Found on stack overflow. Make a single dimensional array with X * Y spots.
+    //When accessing it's DesiredRow * #OfColumns + DesiredColumn
+    int arraySize = verticeList.size() * verticeList.size();
+    matrix = new int [arraySize];
+    for (int i = 0; i < arraySize; i++)
+    {
+        matrix[i] = 0;
+    }
     return;
 }
 
