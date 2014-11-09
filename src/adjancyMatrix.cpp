@@ -53,11 +53,15 @@ void adjancyMatrix::addVertex(std::string newVertex)
     std::string input;
     while (input != "QUIT")
     {
-        std::cout << "List any adjacent nodes. Terminate with QUIT." << std::endl;
+        std::cout << "List any adjacent nodes for " << newVertex << ". Terminate with QUIT." << std::endl;
         std::cin >> input;
         for (int i = 0; i < verticeList.size()-1; i++)
         {
-            if (verticeList.at(i) -> returnName() == input)
+            if (input == "QUIT")
+            {
+                break;
+            }
+            else if (verticeList.at(i) -> returnName() == input)
             {
                 //This has to be the last column of the matrix as this was the insertion
                 matrix[((verticeList.size()-1)*verticeList.size()) + i] = 1;
@@ -67,6 +71,10 @@ void adjancyMatrix::addVertex(std::string newVertex)
                     matrix[(i * verticeList.size()) + verticeList.size()-1] = 1;
                 }
                 std::cout << "Connection Added" << std::endl;
+            }
+            else if (i == verticeList.size()-2)
+            {
+                std::cout << "Vertex not found" << std::endl;
             }
         }
     }
