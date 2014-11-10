@@ -32,12 +32,12 @@ void adjancyList::addVertex(std::string vertexName)
                     //Apply the attribute on the other vertex as well
                     theList.at(i) -> addToAdjacentList(newVertex);
                 }
-                std::cout << "Connection Added" << std::endl;
+                std::cout << "Connection Added." << std::endl;
                 break;
             }
             else if (i == theList.size()-2)
             {
-                std::cout << "Vertex not found" << std::endl;
+                std::cout << "Vertex not found." << std::endl;
             }
         }
     }
@@ -78,9 +78,79 @@ void adjancyList::removeVertex(std::string targetVertex)
                     theList.push_back(replacementList.at(h));
                 }
             }
+            return;
         }
     }
     std::cout << "Vertex not found" << std::endl;
+}
+
+void adjancyList::depthFirst(std::string start)
+{
+    for (int i = 0; i < theList.size(); i++)
+    {
+        if (theList.at(i) -> returnName() == start)
+        {
+            depthTraversal(theList.at(i));
+            std::cout << "END" << std::endl;
+            for (int h = 0; h < theList.size(); h++)
+            {
+                theList.at(i) -> setVisitFlag(false);
+            }
+            return;
+        }
+    }
+    std::cout << "Vertex does not exist." << std::endl;
+}
+
+void adjancyList::depthTraversal(vertex * start)
+{
+    std::cout << start -> returnName() << " -> ";
+    start -> setVisitFlag(true);
+    std::vector<vertex*> adjancent = start -> returnAdjacentList();
+    for (int i = 0; i < adjancent.size(); i++)
+    {
+        if (adjancent.at(i) -> wasVisited() == false)
+        {
+            depthTraversal(adjancent.at(i));
+        }
+    }
+    return;
+}
+
+void adjancyList::breadthFirst(std::string start)
+{
+    for (int i = 0; i < theList.size(); i++)
+    {
+        //If we find the start node
+        if (theList.at(i) -> returnName() == start)
+        {
+            //Starting with this node
+            std::vector<vertex*> masterList;
+            masterList.push_back(theList.at(i));
+            for (int q = 0; q < masterList.size(); q++)
+            {
+                std::cout << masterList.at(q) -> returnName() << " -> ";
+                masterList.at(q) -> setVisitFlag(true);
+                std::vector<vertex*> adjacent = masterList.at(q) -> returnAdjacentList();
+                for (int d = 0; d < adjacent.size(); d++)
+                {
+                    if (adjacent.at(d) -> wasVisited() ==  false)
+                    {
+                        masterList.push_back(adjacent.at(d));
+                    }
+                }
+            }
+            std::cout << "END" << std::endl;
+            //Reset visit flag for future traversals
+            for (int h = 0; h < theList.size(); h++)
+            {
+                theList.at(i) -> setVisitFlag(false);
+            }
+            return;
+        }
+    }
+
+    std::cout << "Vertex does not exist." << std::endl;
 }
 
 void adjancyList::printList()

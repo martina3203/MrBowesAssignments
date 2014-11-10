@@ -19,6 +19,7 @@ class adjancyList
     protected:
     private:
         std::vector<vertex*> theList;
+        void depthTraversal(vertex*);
         bool directed;
 
 };

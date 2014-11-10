@@ -16,7 +16,8 @@ int main()
     otherGraph.addVertex("New");
     otherGraph.addVertex("Sara");
     otherGraph.addVertex("Alex");
-    otherGraph.removeVertex("New");
-    otherGraph.printList();
+    otherGraph.breadthFirst("Sara");
+    //otherGraph.removeVertex("New");
+    //otherGraph.depthFirst("Alex");
     return 1;
 }
