@@ -2,3 +2,5 @@
 *.o
 obj/Debug/main.o
 *.o
+*.exe
+*.exe

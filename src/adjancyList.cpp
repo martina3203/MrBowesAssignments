@@ -137,6 +137,7 @@ void adjancyList::breadthFirst(std::string start)
                     if (adjacent.at(d) -> wasVisited() ==  false)
                     {
                         masterList.push_back(adjacent.at(d));
+                        adjacent.at(q) -> setVisitFlag(true);
                     }
                 }
             }
