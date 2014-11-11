@@ -2,6 +2,7 @@
 #define ADJANCYLIST_H
 
 #include "vertex.h"
+#include "edge.h"
 #include <iostream>
 #include <iomanip>
 

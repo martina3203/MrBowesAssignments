@@ -39,8 +39,9 @@
 	<string>
 	<vector>
 
-1415672847 c:\users\aaron\documents\github\mrbowesassignments\include\adjancylist.h
+1415673518 c:\users\aaron\documents\github\mrbowesassignments\include\adjancylist.h
 	"vertex.h"
+	"edge.h"
 	<iostream>
 	<iomanip>
 
@@ -50,6 +51,12 @@
 1415672847 source:c:\users\aaron\documents\github\mrbowesassignments\src\vertex.cpp
 	"vertex.h"
 
-1415672847 source:c:\users\aaron\documents\github\mrbowesassignments\src\adjancylist.cpp
+1415673045 source:c:\users\aaron\documents\github\mrbowesassignments\src\adjancylist.cpp
 	"adjancyList.h"
+
+1415673533 c:\users\aaron\documents\github\mrbowesassignments\include\edge.h
+	"vertex.h"
+
+1415673701 source:c:\users\aaron\documents\github\mrbowesassignments\src\edge.cpp
+	"edge.h"
 

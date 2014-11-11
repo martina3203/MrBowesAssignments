@@ -4,3 +4,5 @@ obj/Debug/main.o
 *.o
 *.exe
 *.exe
+bin/Debug/Graphs.exe
+*.exe
