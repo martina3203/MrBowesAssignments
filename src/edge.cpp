@@ -22,13 +22,13 @@ void edge::setWeight(int newWeight)
     weight = newWeight;
 }
 
-vertex * edge::returnStartV(vertex*)
+vertex * edge::returnStartV()
 {
     return startingVertex;
 }
 
 
-vertex * edge::returnEndV(vertex*)
+vertex * edge::returnEndV()
 {
     return endingVertex;
 }

@@ -11,8 +11,8 @@ class edge
         void addStartV(vertex*);
         void addEndV(vertex*);
         void setWeight(int);
-        vertex * returnStartV(vertex*);
-        vertex * returnEndV(vertex*);
+        vertex * returnStartV();
+        vertex * returnEndV();
         int returnWeight();
     protected:
     private:

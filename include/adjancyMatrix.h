@@ -2,6 +2,7 @@
 #define ADJANCYMATRIX_H
 
 #include "vertex.h"
+#include "edge.h"
 #include <iostream>
 #include <iomanip>
 
@@ -21,6 +22,7 @@ class adjancyMatrix
         void depthTraverse(int);
         void breadthTraverse(int);
         std::vector<vertex*> verticeList;
+        std::vector<edge> edgeList;
         int * matrix;
         bool directed;
         bool weighted;

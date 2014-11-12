@@ -6,3 +6,4 @@ obj/Debug/main.o
 *.exe
 bin/Debug/Graphs.exe
 *.exe
+*.o

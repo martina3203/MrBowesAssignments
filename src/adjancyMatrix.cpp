@@ -21,11 +21,18 @@ void adjancyMatrix::addVertex(std::string newVertex)
                 if (matrix[i * verticeList.size() + h] != 0)
                 {
                     //Save in that list
-                    verticeList.at(i) -> addToAdjacentList(verticeList.at(h));
+                    //verticeList.at(i) -> addToAdjacentList(verticeList.at(h));
+                    //Create a new edge to be saved in the list
+                    edge newEdge;
+                    newEdge.addStartV(verticeList.at(i));
+                    newEdge.addEndV(verticeList.at(h));
+                    newEdge.setWeight(matrix[i*verticeList.size() + h]);
+                    edgeList.push_back(newEdge);
                 }
             }
         }
     }
+    //We create a new vertex
     vertex * tempVertex = new vertex;
     tempVertex -> setName(newVertex);
     verticeList.push_back(tempVertex);
@@ -33,22 +40,22 @@ void adjancyMatrix::addVertex(std::string newVertex)
     //Copy everything over again
     for (int row = 0; row < verticeList.size()-1; row++)
     {
-        std::vector<vertex*> adjacent = verticeList.at(row) -> returnAdjacentList();
         for (int column = 0; column < verticeList.size()-1; column++)
         {
-            //For the adjacent list
-            for (int j = 0; j < adjacent.size(); j++)
-            {
-                if (adjacent.at(j) == verticeList.at(column))
+            //For the list of edges
+            for (int j = 0; j < edgeList.size(); j++)
+            {   //If we are at the right position
+                if ((edgeList.at(j).returnStartV() == verticeList.at(row)) &&
+                    (edgeList.at(j).returnEndV() == verticeList.at(column)))
                 {
-                    matrix[row * verticeList.size() + column] = 1;
+                    matrix[row * verticeList.size() + column] = edgeList.at(j).returnWeight();
                     break;
                 }
             }
-            //Clear up the adjancy list of all vertices for future usage
-            verticeList.at(row) -> clearList();
         }
     }
+    //Clear list for future usage
+    edgeList.clear();
 
     std::string input;
     while (input != "QUIT")
@@ -83,6 +90,7 @@ void adjancyMatrix::addVertex(std::string newVertex)
     return;
 }
 
+
 void adjancyMatrix::removeVertex(std::string targetVertex)
 {
     for (int i = 0; i < verticeList.size(); i++)
@@ -101,13 +109,17 @@ void adjancyMatrix::removeVertex(std::string targetVertex)
                         //Save in that list if it's not the vertex being deleted
                         if (verticeList.at(h) -> returnName() != targetVertex)
                         {
-                            verticeList.at(i) -> addToAdjacentList(verticeList.at(h));
+                            edge newEdge;
+                            newEdge.addStartV(verticeList.at(i));
+                            newEdge.addEndV(verticeList.at(h));
+                            newEdge.setWeight(matrix[i*verticeList.size() + h]);
+                            edgeList.push_back(newEdge);
                         }
                     }
                 }
             }
             //Remove and copy everything over by a node into the list
-            for (int h = i; h < verticeList.size()-1; h++)
+            for (int h = 0; h < verticeList.size()-1; h++)
             {
                 //Move up the list
                 verticeList.at(h) = verticeList.at(h+1);
@@ -119,22 +131,24 @@ void adjancyMatrix::removeVertex(std::string targetVertex)
             rebuildMatrix();
             for (int row = 0; row < verticeList.size(); row++)
             {
-                std::vector<vertex*> adjacent = verticeList.at(row) -> returnAdjacentList();
                 for (int column = 0; column < verticeList.size(); column++)
                 {
                     //For the adjacent list
-                    for (int j = 0; j < adjacent.size(); j++)
+                    for (int j = 0; j < edgeList.size(); j++)
                     {
-                        if (adjacent.at(j) == verticeList.at(column))
+                        //If this is the right position
+                        if ((edgeList.at(j).returnStartV() == verticeList.at(row)) &&
+                        (edgeList.at(j).returnEndV() == verticeList.at(column)))
                         {
-                            matrix[row * verticeList.size() + column] = 1;
+                            matrix[row * verticeList.size() + column] = edgeList.at(j).returnWeight();
                             break;
                         }
                     }
                     //Clear up the adjancy list of all vertices for future usage
-                    verticeList.at(row) -> clearList();
+
                 }
             }
+            edgeList.clear();
             return;
         }
     }

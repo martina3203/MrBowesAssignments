@@ -17,21 +17,6 @@ std::string vertex::returnName()
     return vertexName;
 }
 
-void vertex::addToAdjacentList(vertex* adjacent)
-{
-    adjacentList.push_back(adjacent);
-}
-
-std::vector<vertex*> vertex::returnAdjacentList()
-{
-    return adjacentList;
-}
-
-void vertex::clearList()
-{
-    adjacentList.clear();
-}
-
 bool vertex::wasVisited()
 {
     return visited;

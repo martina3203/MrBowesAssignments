@@ -35,10 +35,12 @@
 		</Compiler>
 		<Unit filename="include/adjancyList.h" />
 		<Unit filename="include/adjancyMatrix.h" />
+		<Unit filename="include/edge.h" />
 		<Unit filename="include/vertex.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/adjancyList.cpp" />
 		<Unit filename="src/adjancyMatrix.cpp" />
+		<Unit filename="src/edge.cpp" />
 		<Unit filename="src/vertex.cpp" />
 		<Extensions>
 			<code_completion />
