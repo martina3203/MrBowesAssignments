@@ -1,16 +1,11 @@
 #include "adjancyMatrix.h"
+#include "adjancyList.h"
 
 int main()
 {
-
-    adjancyMatrix newGraph;
-    newGraph.addVertex("Poop");
-    newGraph.addVertex("Chicken");
-    newGraph.addVertex("Waka");
-    newGraph.removeVertex("Poop");
-    //newGraph.depthFirst("Poop");
-    newGraph.printVertices();
-    //newGraph.breadthFirst("Chicken");
-
+    adjancyList newList;
+    newList.addVertex("Poop");
+    newList.addVertex("Chicken");
+    newList.printList();
     return 1;
 }

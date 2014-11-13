@@ -13,6 +13,9 @@ void adjancyList::addVertex(std::string vertexName)
     theList.push_back(newVertex);
     //Add Connections
     std::string input;
+    //Adds a new column to store all the new edges
+    std::vector<edge> newEdgeListForVertex;
+    edgeList.push_back(newEdgeListForVertex);
     while (input != "QUIT")
     {
         std::cout << "List any adjacent nodes for " << vertexName << ". Terminate with QUIT." << std::endl;
@@ -25,12 +28,22 @@ void adjancyList::addVertex(std::string vertexName)
             }
             else if (theList.at(i) -> returnName() == input)
             {
+                int newWeight;
+                std::cout << "Now the weight: ";
+                std::cin >> newWeight;
                 //Add as an adjacent node
-                newVertex -> addToAdjacentList(theList.at(i));
+                edge newEdge;
+                newEdge.addStartV(newVertex);
+                newEdge.addEndV(theList.at(i));
+                newEdge.setWeight(newWeight);
+                edgeList.at(edgeList.size()-1).push_back(newEdge);
                 if (directed == false)
                 {
                     //Apply the attribute on the other vertex as well
-                    theList.at(i) -> addToAdjacentList(newVertex);
+                    newEdge.addStartV(theList.at(i));
+                    newEdge.addEndV(newVertex);
+                    newEdge.setWeight(newWeight);
+                    edgeList.at(i).push_back(newEdge);
                 }
                 std::cout << "Connection Added." << std::endl;
                 break;
@@ -56,16 +69,15 @@ void adjancyList::removeVertex(std::string targetVertex)
             for (int h = 0; h < theList.size(); h++)
             {
                 //Obtain and clear list for replacement list
-                std::vector<vertex*> adjacentList = theList.at(h) -> returnAdjacentList();
-                theList.at(h) -> clearList();
+                /*
                 for (int d = 0; d < adjacentList.size(); d++)
                 {
                     //Add it back on if it's ok
-                    if (adjacentList.at(d) != theList.at(i))
+                    if ( != theList.at(i))
                     {
-                        theList.at(h) -> addToAdjacentList(adjacentList.at(d));
                     }
                 }
+                */
             }
             //Finally, update the list to remove this node
             std::vector<vertex*> replacementList = theList;
@@ -106,6 +118,7 @@ void adjancyList::depthTraversal(vertex * start)
 {
     std::cout << start -> returnName() << " -> ";
     start -> setVisitFlag(true);
+    /*
     std::vector<vertex*> adjancent = start -> returnAdjacentList();
     for (int i = 0; i < adjancent.size(); i++)
     {
@@ -114,6 +127,7 @@ void adjancyList::depthTraversal(vertex * start)
             depthTraversal(adjancent.at(i));
         }
     }
+    */
     return;
 }
 
@@ -130,8 +144,7 @@ void adjancyList::breadthFirst(std::string start)
             for (int q = 0; q < masterList.size(); q++)
             {
                 std::cout << masterList.at(q) -> returnName() << " -> ";
-                masterList.at(q) -> setVisitFlag(true);
-                std::vector<vertex*> adjacent = masterList.at(q) -> returnAdjacentList();
+                masterList.at(q) -> setVisitFlag(true);/*
                 for (int d = 0; d < adjacent.size(); d++)
                 {
                     if (adjacent.at(d) -> wasVisited() ==  false)
@@ -139,7 +152,7 @@ void adjancyList::breadthFirst(std::string start)
                         masterList.push_back(adjacent.at(d));
                         adjacent.at(q) -> setVisitFlag(true);
                     }
-                }
+                }*/
             }
             std::cout << "END" << std::endl;
             //Reset visit flag for future traversals
@@ -159,7 +172,18 @@ void adjancyList::printList()
     for (int i = 0; i < theList.size(); i++)
     {
         std::cout << theList.at(i) -> returnName() << std::endl;
+        std::vector<edge> edgesVector = edgeList.at(i);
+        for (int i = 0; i < edgesVector.size(); i++)
+        {
+            std::cout << edgesVector.at(i).returnEndV() -> returnName();
+        }
+        std::cout << std::endl;
     }
+}
+
+void adjancyList::setDirected(bool statement)
+{
+    directed = statement;
 }
 
 adjancyList::~adjancyList()

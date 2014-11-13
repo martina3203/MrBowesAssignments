@@ -16,13 +16,14 @@ class adjancyList
         void depthFirst(std::string);
         void breadthFirst(std::string);
         void printList();
+        void setDirected(bool);
         virtual ~adjancyList();
     protected:
     private:
         std::vector<vertex*> theList;
+        std::vector< std::vector<edge> > edgeList;
         void depthTraversal(vertex*);
         bool directed;
-
 };
 
 #endif // ADJANCYLIST_H
