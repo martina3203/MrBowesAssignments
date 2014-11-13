@@ -69,15 +69,18 @@ void adjancyList::removeVertex(std::string targetVertex)
             for (int h = 0; h < theList.size(); h++)
             {
                 //Obtain and clear list for replacement list
-                /*
-                for (int d = 0; d < adjacentList.size(); d++)
+                std::vector<edge> currentEdgeList = edgeList.at(h);
+                std::vector<edge> updatedEdgeList;
+                for (int d = 0; d < currentEdgeList.size(); d++)
                 {
                     //Add it back on if it's ok
-                    if ( != theList.at(i))
+                    if (currentEdgeList.at(d).returnStartV() != removedVertex)
                     {
+                        updatedEdgeList.push_back(currentEdgeList.at(d));
                     }
                 }
-                */
+                //Copy over the list
+                edgeList.at(h) = updatedEdgeList;
             }
             //Finally, update the list to remove this node
             std::vector<vertex*> replacementList = theList;
