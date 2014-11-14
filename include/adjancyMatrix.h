@@ -16,6 +16,8 @@ class adjancyMatrix
         void breadthFirst(std::string);
         void depthFirst(std::string);
         void printVertices();
+        void setDirected(bool);
+        void Dijkstra(std::string);
     protected:
     private:
         void rebuildMatrix();
@@ -25,7 +27,6 @@ class adjancyMatrix
         std::vector<edge> edgeList;
         int * matrix;
         bool directed;
-        bool weighted;
 };
 
 #endif // ADJANCYMATRIX_H

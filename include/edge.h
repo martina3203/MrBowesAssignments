@@ -21,4 +21,12 @@ class edge
         int weight;
 };
 
+class graphSegment
+{
+public:
+    vertex * pointer;
+    int position;
+    vertex * previousPointer;
+};
+
 #endif // EDGE_H

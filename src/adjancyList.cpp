@@ -122,10 +122,9 @@ void adjancyList::depthTraversal(vertex * start)
     std::cout << start -> returnName() << " -> ";
     start -> setVisitFlag(true);
     /*
-    std::vector<vertex*> adjancent = start -> returnAdjacentList();
-    for (int i = 0; i < adjancent.size(); i++)
+    for (int i = 0; i < edgeList.size(); i++)
     {
-        if (adjancent.at(i) -> wasVisited() == false)
+        if (edgeList.at(i) -> wasVisited() == false)
         {
             depthTraversal(adjancent.at(i));
         }

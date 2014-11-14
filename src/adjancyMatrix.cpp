@@ -4,7 +4,6 @@ adjancyMatrix::adjancyMatrix()
 {
     matrix = NULL;
     directed = false;
-    weighted = false;
 }
 
 void adjancyMatrix::addVertex(std::string newVertex)
@@ -20,8 +19,6 @@ void adjancyMatrix::addVertex(std::string newVertex)
                 //If there is a connection between these two vertices
                 if (matrix[i * verticeList.size() + h] != 0)
                 {
-                    //Save in that list
-                    //verticeList.at(i) -> addToAdjacentList(verticeList.at(h));
                     //Create a new edge to be saved in the list
                     edge newEdge;
                     newEdge.addStartV(verticeList.at(i));
@@ -71,11 +68,14 @@ void adjancyMatrix::addVertex(std::string newVertex)
             else if (verticeList.at(i) -> returnName() == input)
             {
                 //This has to be the last column of the matrix as this was the insertion
-                matrix[((verticeList.size()-1)*verticeList.size()) + i] = 1;
+                int newWeight;
+                std::cout << "Now the weight: ";
+                std::cin >> newWeight;
+                matrix[((verticeList.size()-1)*verticeList.size()) + i] = newWeight;
                 if (directed == false)
                 {
                     //Apply the attribute on the other vertex as well
-                    matrix[(i * verticeList.size()) + verticeList.size()-1] = 1;
+                    matrix[(i * verticeList.size()) + verticeList.size()-1] = newWeight;
                 }
                 std::cout << "Connection Added" << std::endl;
                 break;
@@ -89,7 +89,6 @@ void adjancyMatrix::addVertex(std::string newVertex)
 
     return;
 }
-
 
 void adjancyMatrix::removeVertex(std::string targetVertex)
 {
@@ -281,6 +280,71 @@ void adjancyMatrix::printVertices()
         }
         std::cout << std::endl;
     }
+}
+
+void adjancyMatrix::setDirected(bool statement)
+{
+    directed = statement;
+}
+
+void adjancyMatrix::Dijkstra(std::string start)
+{
+    //Find the starting location
+    //Three Segments needed in the chart
+    //The List of all nodes
+    //A list of the previous nodes
+    std::vector<vertex*> previousVertex;
+    for (int i = 0; i < previousVertex.size();i++)
+    {
+        previousVertex.push_back(NULL);
+    }
+    //A list of total weight
+    std::vector<int> weightVector;
+    for (int i = 0; i < weightVector.size(); i++)
+    {
+        weightVector.push_back(1000000);
+    }
+
+    vertex * startingVertex = NULL;
+    int savedLocation;
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        if (verticeList.at(i) -> returnName() == start)
+        {
+            startingVertex = verticeList.at(i);
+            savedLocation = i;
+            break;
+        }
+    }
+
+    //As long as we have our start location
+    if (startingVertex != NULL)
+    {
+        std::vector<graphSegment> vertexQueue;
+        graphSegment newSegment;
+        newSegment.pointer = startingVertex;
+        newSegment.position = savedLocation;
+        newSegment.previousPointer = NULL;
+        //While there are still things on the queue
+        for (int i = 0; i < vertexQueue.size(); i++)
+        {
+            //Investigate all the adjacent nodes
+            for (int column = 0; column < verticeList.size(); column++)
+            {
+                //If there is a connection
+                if (matrix[vertexQueue.at(i).position*verticeList.size() + column] != 0)
+                {
+                    //Determine if this is cheaper than the previous listed in the chart
+                    if (matrix[vertexQueue.at(i).position*verticeList.size() + column] + weightVector.at(vertexQueue.at(i).position)
+                        > weightVector.at(column));
+                    {
+
+                    }
+                }
+            }
+        }
+    }
+    std::cout << "Vertex not found." << std::endl;
 }
 
 adjancyMatrix::~adjancyMatrix()
