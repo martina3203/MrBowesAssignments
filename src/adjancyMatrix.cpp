@@ -290,21 +290,6 @@ void adjancyMatrix::setDirected(bool statement)
 void adjancyMatrix::Dijkstra(std::string start)
 {
     //Find the starting location
-    //Three Segments needed in the chart
-    //The List of all nodes
-    //A list of the previous nodes
-    std::vector<vertex*> previousVertex;
-    for (int i = 0; i < previousVertex.size();i++)
-    {
-        previousVertex.push_back(NULL);
-    }
-    //A list of total weight
-    std::vector<int> weightVector;
-    for (int i = 0; i < weightVector.size(); i++)
-    {
-        weightVector.push_back(1000000);
-    }
-
     vertex * startingVertex = NULL;
     int savedLocation;
     for (int i = 0; i < verticeList.size(); i++)
@@ -316,15 +301,22 @@ void adjancyMatrix::Dijkstra(std::string start)
             break;
         }
     }
+    std::vector<graphSegment> graphMatrix;
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        graphSegment newSegment;
+        newSegment.pointer = startingVertex;
+        newSegment.position = savedLocation;
+        newSegment.previousPointer = NULL;
+        newSegment.totalWeight = 0;
+        graphMatrix.push_back(newSegment);
+    }
 
     //As long as we have our start location
     if (startingVertex != NULL)
     {
         std::vector<graphSegment> vertexQueue;
-        graphSegment newSegment;
-        newSegment.pointer = startingVertex;
-        newSegment.position = savedLocation;
-        newSegment.previousPointer = NULL;
+        vertexQueue.push_back(graphMatrix.at(savedLocation));
         //While there are still things on the queue
         for (int i = 0; i < vertexQueue.size(); i++)
         {
@@ -335,13 +327,17 @@ void adjancyMatrix::Dijkstra(std::string start)
                 if (matrix[vertexQueue.at(i).position*verticeList.size() + column] != 0)
                 {
                     //Determine if this is cheaper than the previous listed in the chart
-                    if (matrix[vertexQueue.at(i).position*verticeList.size() + column] + weightVector.at(vertexQueue.at(i).position)
-                        > weightVector.at(column));
+                    int currentWeight = matrix[vertexQueue.at(i).position*verticeList.size() + column]
+                        + graphMatrix.at(i).totalWeight;
+                    if (currentWeight < graphMatrix.at(column).totalWeight)
                     {
-
+                        std::cout << currentWeight;
+                        graphMatrix.at(column).totalWeight = currentWeight;
+                        graphMatrix.at(column).previousPointer = graphMatrix.at(i).pointer;
                     }
                 }
             }
+            vertexQueue.at(i).pointer -> setVisitFlag(true);
         }
     }
     std::cout << "Vertex not found." << std::endl;

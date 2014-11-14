@@ -27,6 +27,7 @@ public:
     vertex * pointer;
     int position;
     vertex * previousPointer;
+    int totalWeight;
 };
 
 #endif // EDGE_H
