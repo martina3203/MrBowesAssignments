@@ -17,7 +17,7 @@ class adjancyMatrix
         void depthFirst(std::string);
         void printVertices();
         void setDirected(bool);
-        void Dijkstra(std::string);
+        void Dijkstra(std::string,std::string);
     protected:
     private:
         void rebuildMatrix();
@@ -25,6 +25,7 @@ class adjancyMatrix
         void breadthTraverse(int);
         std::vector<vertex*> verticeList;
         std::vector<edge> edgeList;
+        void resetVisitFlags();
         int * matrix;
         bool directed;
 };

@@ -287,7 +287,7 @@ void adjancyMatrix::setDirected(bool statement)
     directed = statement;
 }
 
-void adjancyMatrix::Dijkstra(std::string start)
+void adjancyMatrix::Dijkstra(std::string start, std::string End)
 {
     //Find the starting location
     vertex * startingVertex = NULL;
@@ -305,18 +305,21 @@ void adjancyMatrix::Dijkstra(std::string start)
     for (int i = 0; i < verticeList.size(); i++)
     {
         graphSegment newSegment;
-        newSegment.pointer = startingVertex;
-        newSegment.position = savedLocation;
+        newSegment.pointer = verticeList.at(i);
+        newSegment.position = i;
         newSegment.previousPointer = NULL;
-        newSegment.totalWeight = 0;
+        newSegment.totalWeight = 1000000;
         graphMatrix.push_back(newSegment);
     }
 
     //As long as we have our start location
     if (startingVertex != NULL)
     {
+        //Add starting location to queue
         std::vector<graphSegment> vertexQueue;
+        graphMatrix.at(savedLocation).totalWeight = 0;
         vertexQueue.push_back(graphMatrix.at(savedLocation));
+        vertexQueue.at(savedLocation).pointer -> setVisitFlag(true);
         //While there are still things on the queue
         for (int i = 0; i < vertexQueue.size(); i++)
         {
@@ -328,19 +331,65 @@ void adjancyMatrix::Dijkstra(std::string start)
                 {
                     //Determine if this is cheaper than the previous listed in the chart
                     int currentWeight = matrix[vertexQueue.at(i).position*verticeList.size() + column]
-                        + graphMatrix.at(i).totalWeight;
+                        + graphMatrix.at(vertexQueue.at(i).position).totalWeight;
                     if (currentWeight < graphMatrix.at(column).totalWeight)
                     {
-                        std::cout << currentWeight;
                         graphMatrix.at(column).totalWeight = currentWeight;
                         graphMatrix.at(column).previousPointer = graphMatrix.at(i).pointer;
                     }
+                    //If we can evaluate this next, do so
+                    if (graphMatrix.at(column).pointer -> wasVisited() != true)
+                    {
+                        vertexQueue.push_back(graphMatrix.at(column));
+                        graphMatrix.at(column).pointer -> setVisitFlag(true);
+                    }
                 }
             }
-            vertexQueue.at(i).pointer -> setVisitFlag(true);
+        }/*
+        for (int i = 0; i < graphMatrix.size(); i++)
+        {
+            std::cout << graphMatrix.at(i).totalWeight << " ";
+        }*/
+
+        //Now we shall return the order that the user must traverse to get the minimum amount of weight
+        for (int i = 0; i < graphMatrix.size(); i++)
+        {
+            if (graphMatrix.at(i).pointer -> returnName() == End)
+            {
+                vertex * currentPointer = graphMatrix.at(i).previousPointer;
+                std::string outputString = graphMatrix.at(i).pointer -> returnName();
+                savedLocation = i;
+                while (currentPointer != startingVertex)
+                {
+                    currentPointer = graphMatrix.at(savedLocation).previousPointer;
+                    outputString = currentPointer -> returnName() + " " + outputString;
+                    for (int d = 0; d < graphMatrix.size(); d++)
+                    {
+                        if (currentPointer == graphMatrix.at(d).pointer)
+                        {
+                            savedLocation = d;
+                            break;
+                        }
+                    }
+                }
+                outputString = " " + outputString;
+                std::cout << "Weight: " << graphMatrix.at(i).totalWeight << std::endl;
+                std::cout << outputString << std::endl;
+                break;
+            }
         }
+        resetVisitFlags();
+        return;
     }
     std::cout << "Vertex not found." << std::endl;
+}
+
+void adjancyMatrix::resetVisitFlags()
+{
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        verticeList.at(i) -> setVisitFlag(false);
+    }
 }
 
 adjancyMatrix::~adjancyMatrix()

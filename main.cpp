@@ -3,11 +3,11 @@
 
 int main()
 {
-    adjancyList newList;
-    newList.addVertex("Poop");
-    newList.addVertex("Chicken");
-    newList.addVertex("Sara");
-    newList.removeVertex("Poop");
-    newList.printList();
+    adjancyMatrix newList;
+    newList.addVertex("B");
+    newList.addVertex("A");
+    newList.addVertex("C");
+    newList.addVertex("D");
+    newList.Dijkstra("B","D");
     return 1;
 }
