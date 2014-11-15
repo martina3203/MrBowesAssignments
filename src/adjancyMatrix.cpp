@@ -372,7 +372,6 @@ void adjancyMatrix::Dijkstra(std::string start, std::string End)
                         }
                     }
                 }
-                outputString = " " + outputString;
                 std::cout << "Weight: " << graphMatrix.at(i).totalWeight << std::endl;
                 std::cout << outputString << std::endl;
                 break;
