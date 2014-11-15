@@ -188,6 +188,107 @@ void adjancyList::setDirected(bool statement)
     directed = statement;
 }
 
+void adjancyList::Dijkstra(std::string start, std::string End)
+{
+    vertex * startingVertex = NULL;
+    int savedLocation;
+    for (int i = 0; i < theList.size(); i++)
+    {
+        if (theList.at(i) -> returnName() == start)
+        {
+            startingVertex = theList.at(i);
+            savedLocation = i;
+            break;
+        }
+    }
+    std::vector<graphSegment> graphMatrix;
+    for (int i = 0; i < theList.size(); i++)
+    {
+        graphSegment newSegment;
+        newSegment.pointer = theList.at(i);
+        newSegment.position = i;
+        newSegment.previousPointer = NULL;
+        newSegment.totalWeight = 1000000;
+        graphMatrix.push_back(newSegment);
+    }
+
+    //As long as we have our start location
+    if (startingVertex != NULL)
+    {
+        //Add starting location to queue
+        std::vector<graphSegment> vertexQueue;
+        graphMatrix.at(savedLocation).totalWeight = 0;
+        vertexQueue.push_back(graphMatrix.at(savedLocation));
+        vertexQueue.at(savedLocation).pointer -> setVisitFlag(true);
+        //While there are still things on the queue
+        for (int i = 0; i < vertexQueue.size(); i++)
+        {
+            //Investigate all the adjacent nodes
+            int currentPosition = vertexQueue.at(i).position;
+            for (int column = 0; column < edgeList.at(currentPosition).size(); column++)
+            {
+                    //Determine if this is cheaper than the previous listed in the chart
+                    int currentWeight = graphMatrix.at(currentPosition).totalWeight + edgeList.at(currentPosition).at(column).returnWeight();
+                    std::cout << currentWeight << " ";
+                    for (int r = 0; r < theList.size(); r++)
+                    {
+                        if (theList.at(r) == edgeList.at(currentPosition).at(column).returnEndV())
+                        {
+                            savedLocation = r;
+                            break;
+                        }
+                    }
+                    if (currentWeight < graphMatrix.at(savedLocation).totalWeight)
+                    {
+                        graphMatrix.at(savedLocation).totalWeight = currentWeight;
+                        graphMatrix.at(savedLocation).previousPointer = graphMatrix.at(currentPosition).pointer;
+                    }
+                    //If we can evaluate this next, do so
+                    if (graphMatrix.at(savedLocation).pointer -> wasVisited() != true)
+                    {
+                        vertexQueue.push_back(graphMatrix.at(savedLocation));
+                        graphMatrix.at(savedLocation).pointer -> setVisitFlag(true);
+                    }
+            }
+        }
+        //Now we shall return the order that the user must traverse to get the minimum amount of weight
+        for (int i = 0; i < graphMatrix.size(); i++)
+        {
+            if (graphMatrix.at(i).pointer -> returnName() == End)
+            {
+                vertex * currentPointer = graphMatrix.at(i).previousPointer;
+                std::string outputString = graphMatrix.at(i).pointer -> returnName();
+                savedLocation = i;
+                while (currentPointer != startingVertex)
+                {
+                    currentPointer = graphMatrix.at(savedLocation).previousPointer;
+                    if (currentPointer != NULL)
+                    {
+                        outputString = currentPointer -> returnName() + " " + outputString;
+                        for (int d = 0; d < graphMatrix.size(); d++)
+                        {
+                            if (currentPointer == graphMatrix.at(d).pointer)
+                            {
+                                savedLocation = d;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                std::cout << "Weight: " << graphMatrix.at(i).totalWeight << std::endl;
+                std::cout << outputString << std::endl;
+                break;
+            }
+        }
+        return;
+    }
+    std::cout << "Vertex not found." << std::endl;
+}
+
 adjancyList::~adjancyList()
 {
     //dtor

@@ -26,38 +26,39 @@
 	<iostream>
 	<iomanip>
 
-1415672847 source:c:\users\aaron\documents\github\mrbowesassignments\main.cpp
+1416090760 source:c:\users\aaron\documents\github\mrbowesassignments\main.cpp
 	"adjancyMatrix.h"
 	"adjancyList.h"
 
-1415672847 c:\users\aaron\documents\github\mrbowesassignments\include\adjancymatrix.h
-	"vertex.h"
-	<iostream>
-	<iomanip>
-
-1415672847 c:\users\aaron\documents\github\mrbowesassignments\include\vertex.h
-	<string>
-	<vector>
-
-1415673518 c:\users\aaron\documents\github\mrbowesassignments\include\adjancylist.h
+1416089705 c:\users\aaron\documents\github\mrbowesassignments\include\adjancymatrix.h
 	"vertex.h"
 	"edge.h"
 	<iostream>
 	<iomanip>
 
-1415672847 source:c:\users\aaron\documents\github\mrbowesassignments\src\adjancymatrix.cpp
+1415761407 c:\users\aaron\documents\github\mrbowesassignments\include\vertex.h
+	<string>
+	<vector>
+
+1416089852 c:\users\aaron\documents\github\mrbowesassignments\include\adjancylist.h
+	"vertex.h"
+	"edge.h"
+	<iostream>
+	<iomanip>
+
+1416091152 source:c:\users\aaron\documents\github\mrbowesassignments\src\adjancymatrix.cpp
 	"adjancyMatrix.h"
 
-1415672847 source:c:\users\aaron\documents\github\mrbowesassignments\src\vertex.cpp
+1415761407 source:c:\users\aaron\documents\github\mrbowesassignments\src\vertex.cpp
 	"vertex.h"
 
-1415673045 source:c:\users\aaron\documents\github\mrbowesassignments\src\adjancylist.cpp
+1416091785 source:c:\users\aaron\documents\github\mrbowesassignments\src\adjancylist.cpp
 	"adjancyList.h"
 
-1415673533 c:\users\aaron\documents\github\mrbowesassignments\include\edge.h
+1416089705 c:\users\aaron\documents\github\mrbowesassignments\include\edge.h
 	"vertex.h"
 
-1415673701 source:c:\users\aaron\documents\github\mrbowesassignments\src\edge.cpp
+1415761521 source:c:\users\aaron\documents\github\mrbowesassignments\src\edge.cpp
 	"edge.h"
 
 1415762192 source:c:\users\aaron\desktop\programming projects\graphs\main.cpp

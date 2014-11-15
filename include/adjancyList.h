@@ -17,6 +17,7 @@ class adjancyList
         void breadthFirst(std::string);
         void printList();
         void setDirected(bool);
+        void Dijkstra(std::string,std::string);
         virtual ~adjancyList();
     protected:
     private:

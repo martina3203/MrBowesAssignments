@@ -345,12 +345,7 @@ void adjancyMatrix::Dijkstra(std::string start, std::string End)
                     }
                 }
             }
-        }/*
-        for (int i = 0; i < graphMatrix.size(); i++)
-        {
-            std::cout << graphMatrix.at(i).totalWeight << " ";
-        }*/
-
+        }
         //Now we shall return the order that the user must traverse to get the minimum amount of weight
         for (int i = 0; i < graphMatrix.size(); i++)
         {
@@ -362,14 +357,21 @@ void adjancyMatrix::Dijkstra(std::string start, std::string End)
                 while (currentPointer != startingVertex)
                 {
                     currentPointer = graphMatrix.at(savedLocation).previousPointer;
-                    outputString = currentPointer -> returnName() + " " + outputString;
-                    for (int d = 0; d < graphMatrix.size(); d++)
+                    if (currentPointer != NULL)
                     {
-                        if (currentPointer == graphMatrix.at(d).pointer)
+                        outputString = currentPointer -> returnName() + " " + outputString;
+                        for (int d = 0; d < graphMatrix.size(); d++)
                         {
-                            savedLocation = d;
-                            break;
+                            if (currentPointer == graphMatrix.at(d).pointer)
+                            {
+                                savedLocation = d;
+                                break;
+                            }
                         }
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
                 std::cout << "Weight: " << graphMatrix.at(i).totalWeight << std::endl;

@@ -3,7 +3,7 @@
 
 int main()
 {
-    adjancyMatrix newList;
+    adjancyList newList;
     newList.addVertex("B");
     newList.addVertex("A");
     newList.addVertex("C");
