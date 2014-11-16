@@ -17,13 +17,18 @@ class adjancyList
         void breadthFirst(std::string);
         void printList();
         void setDirected(bool);
-        void Dijkstra(std::string,std::string);
+        void Dijkstra(std::string);
+        void Prim(std::string);
+        void Kruskal();
+        void findPath(std::string,std::string);
         virtual ~adjancyList();
     protected:
     private:
         std::vector<vertex*> theList;
         std::vector< std::vector<edge> > edgeList;
+        std::vector<graphSegment> graphChart;
         void depthTraversal(vertex*);
+        void resetVisitFlags();
         bool directed;
 };
 

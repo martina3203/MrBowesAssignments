@@ -287,7 +287,7 @@ void adjancyMatrix::setDirected(bool statement)
     directed = statement;
 }
 
-void adjancyMatrix::Dijkstra(std::string start, std::string End)
+void adjancyMatrix::Dijkstra(std::string start)
 {
     //Find the starting location
     vertex * startingVertex = NULL;
@@ -301,7 +301,7 @@ void adjancyMatrix::Dijkstra(std::string start, std::string End)
             break;
         }
     }
-    std::vector<graphSegment> graphMatrix;
+    graphChart.clear();
     for (int i = 0; i < verticeList.size(); i++)
     {
         graphSegment newSegment;
@@ -309,7 +309,7 @@ void adjancyMatrix::Dijkstra(std::string start, std::string End)
         newSegment.position = i;
         newSegment.previousPointer = NULL;
         newSegment.totalWeight = 1000000;
-        graphMatrix.push_back(newSegment);
+        graphChart.push_back(newSegment);
     }
 
     //As long as we have our start location
@@ -317,8 +317,8 @@ void adjancyMatrix::Dijkstra(std::string start, std::string End)
     {
         //Add starting location to queue
         std::vector<graphSegment> vertexQueue;
-        graphMatrix.at(savedLocation).totalWeight = 0;
-        vertexQueue.push_back(graphMatrix.at(savedLocation));
+        graphChart.at(savedLocation).totalWeight = 0;
+        vertexQueue.push_back(graphChart.at(savedLocation));
         vertexQueue.at(savedLocation).pointer -> setVisitFlag(true);
         //While there are still things on the queue
         for (int i = 0; i < vertexQueue.size(); i++)
@@ -331,59 +331,219 @@ void adjancyMatrix::Dijkstra(std::string start, std::string End)
                 {
                     //Determine if this is cheaper than the previous listed in the chart
                     int currentWeight = matrix[vertexQueue.at(i).position*verticeList.size() + column]
-                        + graphMatrix.at(vertexQueue.at(i).position).totalWeight;
-                    if (currentWeight < graphMatrix.at(column).totalWeight)
+                        + graphChart.at(vertexQueue.at(i).position).totalWeight;
+                    if (currentWeight < graphChart.at(column).totalWeight)
                     {
-                        graphMatrix.at(column).totalWeight = currentWeight;
-                        graphMatrix.at(column).previousPointer = graphMatrix.at(i).pointer;
+                        graphChart.at(column).totalWeight = currentWeight;
+                        graphChart.at(column).previousPointer = graphChart.at(i).pointer;
                     }
                     //If we can evaluate this next, do so
-                    if (graphMatrix.at(column).pointer -> wasVisited() != true)
+                    if (graphChart.at(column).pointer -> wasVisited() != true)
                     {
-                        vertexQueue.push_back(graphMatrix.at(column));
-                        graphMatrix.at(column).pointer -> setVisitFlag(true);
+                        vertexQueue.push_back(graphChart.at(column));
+                        graphChart.at(column).pointer -> setVisitFlag(true);
                     }
                 }
             }
         }
-        //Now we shall return the order that the user must traverse to get the minimum amount of weight
-        for (int i = 0; i < graphMatrix.size(); i++)
+    }
+}
+
+void adjancyMatrix::Prim(std::string start)
+{
+    int startLocation;
+    //Find starting location
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        if (verticeList.at(i) -> returnName() == start)
         {
-            if (graphMatrix.at(i).pointer -> returnName() == End)
+            startLocation = i;
+            verticeList.at(i) -> setVisitFlag(true);
+        }
+    }
+    graphChart.clear();
+    //Rebuild the graph to read information from
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        graphSegment newSegment;
+        newSegment.pointer = verticeList.at(i);
+        newSegment.position = i;
+        newSegment.previousPointer = NULL;
+        newSegment.totalWeight = 1000000;
+        graphChart.push_back(newSegment);
+    }
+    //With the starting vertex, find it's edges and add to queue
+    std::vector<edge> edgeQueue;
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        if (matrix[startLocation * verticeList.size() + i] != 0)
+        {
+            edge possibleEdge;
+            possibleEdge.addStartV(verticeList.at(startLocation));
+            possibleEdge.addEndV(verticeList.at(i));
+            possibleEdge.setWeight(matrix[startLocation*verticeList.size()+i]);
+            edgeQueue.push_back(possibleEdge);
+        }
+    }
+    //While there is stuff in the queue
+    while (edgeQueue.size() != 0)
+    {
+        int smallestEdge = 1000000;
+        vertex * vertexConnectedToEdge = NULL;
+        vertex * previousPointer = NULL;
+        for (int i = 0; i < edgeQueue.size(); i++)
+        {
+            if (edgeQueue.at(i).returnWeight() < smallestEdge)
             {
-                vertex * currentPointer = graphMatrix.at(i).previousPointer;
-                std::string outputString = graphMatrix.at(i).pointer -> returnName();
-                savedLocation = i;
-                while (currentPointer != startingVertex)
-                {
-                    currentPointer = graphMatrix.at(savedLocation).previousPointer;
-                    if (currentPointer != NULL)
-                    {
-                        outputString = currentPointer -> returnName() + " " + outputString;
-                        for (int d = 0; d < graphMatrix.size(); d++)
-                        {
-                            if (currentPointer == graphMatrix.at(d).pointer)
-                            {
-                                savedLocation = d;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                std::cout << "Weight: " << graphMatrix.at(i).totalWeight << std::endl;
-                std::cout << outputString << std::endl;
-                break;
+                smallestEdge = edgeQueue.at(i).returnWeight();
+                vertexConnectedToEdge = edgeQueue.at(i).returnEndV();
+                previousPointer = edgeQueue.at(i).returnStartV();
             }
         }
-        resetVisitFlags();
+        //The smallest edge is now added to the graph
+        for (int i = 0; i < verticeList.size(); i++)
+        {
+           if (vertexConnectedToEdge == verticeList.at(i))
+           {
+               startLocation = i;
+               vertexConnectedToEdge -> setVisitFlag(true);
+               graphChart.at(i).previousPointer = previousPointer;
+               graphChart.at(i).totalWeight = graphChart.at(startLocation).totalWeight + smallestEdge;
+           }
+        }
+        //Add any new vertices that the edge opened up
+        for (int i = 0; i < verticeList.size(); i++)
+        {
+            if (matrix[startLocation * verticeList.size() + i] != 0)
+            {
+                edge possibleEdge;
+                possibleEdge.addStartV(verticeList.at(startLocation));
+                possibleEdge.addEndV(verticeList.at(i));
+                possibleEdge.setWeight(matrix[startLocation*verticeList.size()+i]);
+                edgeQueue.push_back(possibleEdge);
+            }
+        }
+        //Remove any edges that involve that a vertex that is already included in the graph
+        std::vector<edge> newQueue;
+        for (int i = 0; i < edgeQueue.size(); i++)
+        {
+            if (edgeQueue.at(i).returnEndV() -> wasVisited() != true)
+            {
+                newQueue.push_back(edgeQueue.at(i));
+            }
+        }
+        edgeQueue = newQueue;
+    }
+    resetVisitFlags();
+}
+
+void adjancyMatrix::Kruskal()
+{
+    //Collect all the edges
+    std::vector <edge> KruskalEdgeList;
+    for (int i = 0; i < verticeList.size(); i++)
+    {
+        for (int j = 0; j < verticeList.size(); j++)
+        {
+            if (matrix[i * verticeList.size() + j] != 0)
+            {
+                edge possibleEdge;
+                possibleEdge.addStartV(verticeList.at(i));
+                possibleEdge.addEndV(verticeList.at(j));
+                possibleEdge.setWeight(matrix[i*verticeList.size() + j]);
+                KruskalEdgeList.push_back(possibleEdge);
+            }
+        }
+    }
+    //Sort edges
+    for (int i = 0; i < KruskalEdgeList.size(); i++)
+    {
+        for (int j = i; j > 0; j--)
+        {
+            if (KruskalEdgeList.at(j).returnWeight() < KruskalEdgeList.at(j-1).returnWeight())
+            {
+                edge temp = KruskalEdgeList.at(j);
+                KruskalEdgeList.at(j) = KruskalEdgeList.at(j-1);
+                KruskalEdgeList.at(j-1) = temp;
+            }
+        }
+    }
+
+    int minimumWeight = 0;
+    std::vector<edge> resultingTree;
+    KruskalEdgeList.at(0).returnStartV() -> setVisitFlag(true);
+    //Determine which edges to add to the new tree
+    for (int i = 0; i < KruskalEdgeList.size(); i++)
+    {
+        if (KruskalEdgeList.at(i).returnEndV() -> wasVisited() == false)
+        {
+            resultingTree.push_back(KruskalEdgeList.at(i));
+            KruskalEdgeList.at(i).returnEndV() -> setVisitFlag(true);
+        }
+    }
+    resetVisitFlags();
+    //Prints the tree
+    std::cout << "Resultant Tree: ";
+    for (int i = 0; i < resultingTree.size(); i++)
+    {
+        std::cout << resultingTree.at(i).returnStartV() -> returnName() << "->";
+        std::cout << resultingTree.at(i).returnEndV() -> returnName() << " ";
+    }
+    std::cout << std::endl;
+}
+
+void adjancyMatrix::findPath(std::string start, std::string End)
+{
+    vertex * startingVertex = NULL;
+    for (int i = 0; i < graphChart.size(); i++)
+    {
+        if (graphChart.at(i).pointer -> returnName() == start)
+        {
+            startingVertex = graphChart.at(i).pointer;
+        }
+    }
+
+    if (startingVertex == NULL)
+    {
+        std::cout << "Starting Vertex not found" << std::endl;
         return;
     }
-    std::cout << "Vertex not found." << std::endl;
+
+    for (int i = 0; i < graphChart.size(); i++)
+    {
+        if (graphChart.at(i).pointer -> returnName() == End)
+        {
+            vertex * currentPointer = graphChart.at(i).previousPointer;
+            std::string outputString = graphChart.at(i).pointer -> returnName();
+            int savedLocation = i;
+            while (currentPointer != startingVertex)
+            {
+                currentPointer = graphChart.at(savedLocation).previousPointer;
+                if (currentPointer != NULL)
+                {
+                    outputString = currentPointer -> returnName() + " " + outputString;
+                    for (int d = 0; d < graphChart.size(); d++)
+                    {
+                        if (currentPointer == graphChart.at(d).pointer)
+                        {
+                            savedLocation = d;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            std::cout << "Weight: " << graphChart.at(i).totalWeight << std::endl;
+            std::cout << outputString << std::endl;
+            return;
+        }
+    }
 }
+
+
 
 void adjancyMatrix::resetVisitFlags()
 {

@@ -188,7 +188,7 @@ void adjancyList::setDirected(bool statement)
     directed = statement;
 }
 
-void adjancyList::Dijkstra(std::string start, std::string End)
+void adjancyList::Dijkstra(std::string start)
 {
     vertex * startingVertex = NULL;
     int savedLocation;
@@ -201,7 +201,7 @@ void adjancyList::Dijkstra(std::string start, std::string End)
             break;
         }
     }
-    std::vector<graphSegment> graphMatrix;
+    graphChart.clear();
     for (int i = 0; i < theList.size(); i++)
     {
         graphSegment newSegment;
@@ -209,7 +209,7 @@ void adjancyList::Dijkstra(std::string start, std::string End)
         newSegment.position = i;
         newSegment.previousPointer = NULL;
         newSegment.totalWeight = 1000000;
-        graphMatrix.push_back(newSegment);
+        graphChart.push_back(newSegment);
     }
 
     //As long as we have our start location
@@ -217,8 +217,8 @@ void adjancyList::Dijkstra(std::string start, std::string End)
     {
         //Add starting location to queue
         std::vector<graphSegment> vertexQueue;
-        graphMatrix.at(savedLocation).totalWeight = 0;
-        vertexQueue.push_back(graphMatrix.at(savedLocation));
+        graphChart.at(savedLocation).totalWeight = 0;
+        vertexQueue.push_back(graphChart.at(savedLocation));
         vertexQueue.at(savedLocation).pointer -> setVisitFlag(true);
         //While there are still things on the queue
         for (int i = 0; i < vertexQueue.size(); i++)
@@ -228,8 +228,8 @@ void adjancyList::Dijkstra(std::string start, std::string End)
             for (int column = 0; column < edgeList.at(currentPosition).size(); column++)
             {
                     //Determine if this is cheaper than the previous listed in the chart
-                    int currentWeight = graphMatrix.at(currentPosition).totalWeight + edgeList.at(currentPosition).at(column).returnWeight();
-                    std::cout << currentWeight << " ";
+                    int currentWeight = graphChart.at(currentPosition).totalWeight +
+                        edgeList.at(currentPosition).at(column).returnWeight();
                     for (int r = 0; r < theList.size(); r++)
                     {
                         if (theList.at(r) == edgeList.at(currentPosition).at(column).returnEndV())
@@ -238,55 +238,134 @@ void adjancyList::Dijkstra(std::string start, std::string End)
                             break;
                         }
                     }
-                    if (currentWeight < graphMatrix.at(savedLocation).totalWeight)
+                    if (currentWeight < graphChart.at(savedLocation).totalWeight)
                     {
-                        graphMatrix.at(savedLocation).totalWeight = currentWeight;
-                        graphMatrix.at(savedLocation).previousPointer = graphMatrix.at(currentPosition).pointer;
+                        graphChart.at(savedLocation).totalWeight = currentWeight;
+                        graphChart.at(savedLocation).previousPointer = graphChart.at(currentPosition).pointer;
                     }
                     //If we can evaluate this next, do so
-                    if (graphMatrix.at(savedLocation).pointer -> wasVisited() != true)
+                    if (graphChart.at(savedLocation).pointer -> wasVisited() != true)
                     {
-                        vertexQueue.push_back(graphMatrix.at(savedLocation));
-                        graphMatrix.at(savedLocation).pointer -> setVisitFlag(true);
+                        vertexQueue.push_back(graphChart.at(savedLocation));
+                        graphChart.at(savedLocation).pointer -> setVisitFlag(true);
                     }
-            }
-        }
-        //Now we shall return the order that the user must traverse to get the minimum amount of weight
-        for (int i = 0; i < graphMatrix.size(); i++)
-        {
-            if (graphMatrix.at(i).pointer -> returnName() == End)
-            {
-                vertex * currentPointer = graphMatrix.at(i).previousPointer;
-                std::string outputString = graphMatrix.at(i).pointer -> returnName();
-                savedLocation = i;
-                while (currentPointer != startingVertex)
-                {
-                    currentPointer = graphMatrix.at(savedLocation).previousPointer;
-                    if (currentPointer != NULL)
-                    {
-                        outputString = currentPointer -> returnName() + " " + outputString;
-                        for (int d = 0; d < graphMatrix.size(); d++)
-                        {
-                            if (currentPointer == graphMatrix.at(d).pointer)
-                            {
-                                savedLocation = d;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                std::cout << "Weight: " << graphMatrix.at(i).totalWeight << std::endl;
-                std::cout << outputString << std::endl;
-                break;
             }
         }
         return;
     }
     std::cout << "Vertex not found." << std::endl;
+}
+
+void adjancyList::Prim(std::string start)
+{
+
+}
+
+void adjancyList::Kruskal()
+{
+    //Collect Edges
+    std::vector <edge> KruskalEdgeList;
+    for (int i = 0; i < edgeList.size(); i++)
+    {
+        for (int j = 0; j < edgeList.at(i).size(); j++)
+        {
+            KruskalEdgeList.push_back(edgeList.at(i).at(j));
+        }
+    }
+    //Sort edges
+    for (int i = 0; i < KruskalEdgeList.size(); i++)
+    {
+        for (int j = i; j > 0; j--)
+        {
+            if (KruskalEdgeList.at(j).returnWeight() < KruskalEdgeList.at(j-1).returnWeight())
+            {
+                edge temp = KruskalEdgeList.at(j);
+                KruskalEdgeList.at(j) = KruskalEdgeList.at(j-1);
+                KruskalEdgeList.at(j-1) = temp;
+            }
+        }
+    }
+
+    int minimumWeight = 0;
+    std::vector<edge> resultingTree;
+    KruskalEdgeList.at(0).returnStartV() -> setVisitFlag(true);
+    //Determine which edges to add to the new tree
+    for (int i = 0; i < KruskalEdgeList.size(); i++)
+    {
+        if (KruskalEdgeList.at(i).returnEndV() -> wasVisited() == false)
+        {
+            resultingTree.push_back(KruskalEdgeList.at(i));
+            KruskalEdgeList.at(i).returnEndV() -> setVisitFlag(true);
+        }
+    }
+    resetVisitFlags();
+    //Prints the tree
+    std::cout << "Resultant Tree: ";
+    for (int i = 0; i < resultingTree.size(); i++)
+    {
+        std::cout << resultingTree.at(i).returnStartV() -> returnName() << "->";
+        std::cout << resultingTree.at(i).returnEndV() -> returnName() << " ";
+    }
+    std::cout << std::endl;
+}
+
+void adjancyList::resetVisitFlags()
+{
+    for (int i = 0; i < theList.size(); i++)
+    {
+        theList.at(i) -> setVisitFlag(false);
+    }
+}
+
+void adjancyList::findPath(std::string start, std::string End)
+{
+    vertex * startingVertex = NULL;
+    for (int i = 0; i < graphChart.size(); i++)
+    {
+        if (graphChart.at(i).pointer -> returnName() == start)
+        {
+            startingVertex = graphChart.at(i).pointer;
+        }
+    }
+
+    if (startingVertex == NULL)
+    {
+        std::cout << "Starting Vertex not found" << std::endl;
+        return;
+    }
+
+    for (int i = 0; i < graphChart.size(); i++)
+    {
+        if (graphChart.at(i).pointer -> returnName() == End)
+        {
+            vertex * currentPointer = graphChart.at(i).previousPointer;
+            std::string outputString = graphChart.at(i).pointer -> returnName();
+            int savedLocation = i;
+            while (currentPointer != startingVertex)
+            {
+                currentPointer = graphChart.at(savedLocation).previousPointer;
+                if (currentPointer != NULL)
+                {
+                    outputString = currentPointer -> returnName() + " " + outputString;
+                    for (int d = 0; d < graphChart.size(); d++)
+                    {
+                        if (currentPointer == graphChart.at(d).pointer)
+                        {
+                            savedLocation = d;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            std::cout << "Weight: " << graphChart.at(i).totalWeight << std::endl;
+            std::cout << outputString << std::endl;
+            return;
+        }
+    }
 }
 
 adjancyList::~adjancyList()

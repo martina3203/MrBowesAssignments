@@ -8,6 +8,7 @@ int main()
     newList.addVertex("A");
     newList.addVertex("C");
     newList.addVertex("D");
-    newList.Dijkstra("B","D");
+    newList.Dijkstra("B");
+    newList.findPath("B","D");
     return 1;
 }
