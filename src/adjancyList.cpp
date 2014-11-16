@@ -258,7 +258,78 @@ void adjancyList::Dijkstra(std::string start)
 
 void adjancyList::Prim(std::string start)
 {
-
+    int startLocation;
+    //Find starting location
+    for (int i = 0; i < theList.size(); i++)
+    {
+        if (theList.at(i) -> returnName() == start)
+        {
+            startLocation = i;
+            theList.at(i) -> setVisitFlag(true);
+        }
+    }
+    graphChart.clear();
+    //Rebuild the graph to read information from
+    for (int i = 0; i < theList.size(); i++)
+    {
+        graphSegment newSegment;
+        newSegment.pointer = theList.at(i);
+        newSegment.position = i;
+        newSegment.previousPointer = NULL;
+        newSegment.totalWeight = 0;
+        graphChart.push_back(newSegment);
+    }
+    //With the starting vertex, find it's edges and add to queue
+    std::vector<edge> edgeQueue;
+    for (int i = 0; i < edgeList.at(startLocation).size(); i++)
+    {
+        edgeQueue.push_back(edgeList.at(startLocation).at(i));
+    }
+    //While there is stuff in the queue
+    while (edgeQueue.size() != 0)
+    {
+        int smallestEdge = 1000000;
+        vertex * vertexConnectedToEdge = NULL;
+        vertex * previousPointer = NULL;
+        for (int i = 0; i < edgeQueue.size(); i++)
+        {
+            if (edgeQueue.at(i).returnWeight() < smallestEdge)
+            {
+                smallestEdge = edgeQueue.at(i).returnWeight();
+                vertexConnectedToEdge = edgeQueue.at(i).returnEndV();
+                previousPointer = edgeQueue.at(i).returnStartV();
+            }
+        }
+        //The smallest edge is now added to the graph
+        for (int i = 0; i < theList.size(); i++)
+        {
+           if (vertexConnectedToEdge == theList.at(i))
+           {
+               vertexConnectedToEdge -> setVisitFlag(true);
+               graphChart.at(i).previousPointer = previousPointer;
+               graphChart.at(i).totalWeight = graphChart.at(startLocation).totalWeight + smallestEdge;
+               std::cout << graphChart.at(i).totalWeight;
+               startLocation = i;
+               break;
+           }
+        }
+        //Add any new vertices that the edge opened up
+        for (int i = 0; i < edgeList.at(startLocation).size(); i++)
+        {
+            edgeQueue.push_back(edgeList.at(startLocation).at(i));
+        }
+        //Remove any edges that involve that a vertex that is already included in the graph
+        std::vector<edge> newQueue;
+        for (int i = 0; i < edgeQueue.size(); i++)
+        {
+            if (edgeQueue.at(i).returnEndV() -> wasVisited() != true)
+            {
+                newQueue.push_back(edgeQueue.at(i));
+            }
+        }
+        edgeQueue = newQueue;
+    }
+    resetVisitFlags();
 }
 
 void adjancyList::Kruskal()

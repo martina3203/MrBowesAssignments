@@ -405,10 +405,11 @@ void adjancyMatrix::Prim(std::string start)
         {
            if (vertexConnectedToEdge == verticeList.at(i))
            {
-               startLocation = i;
                vertexConnectedToEdge -> setVisitFlag(true);
                graphChart.at(i).previousPointer = previousPointer;
                graphChart.at(i).totalWeight = graphChart.at(startLocation).totalWeight + smallestEdge;
+               startLocation = i;
+               break;
            }
         }
         //Add any new vertices that the edge opened up
