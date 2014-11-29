@@ -440,6 +440,15 @@ void adjancyMatrix::Prim(std::string start)
 
 void adjancyMatrix::Kruskal()
 {
+    if (verticeList.size() == 0)
+    {
+        return;
+    }
+    if (verticeList.size() == 1)
+    {
+        std::cout << verticeList.at(0) -> returnName() << std::endl;
+        return;
+    }
     //Collect all the edges
     std::vector <edge> KruskalEdgeList;
     for (int i = 0; i < verticeList.size(); i++)

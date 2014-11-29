@@ -334,6 +334,19 @@ void adjancyList::Prim(std::string start)
 
 void adjancyList::Kruskal()
 {
+    if (theList.size() == 0)
+    {
+        std::cout << "List is empty" << std::endl;
+        return;
+    }
+    if (theList.size() == 1)
+    {
+        std::cout << theList.at(0) -> returnName() << std::endl;
+        return;
+    }
+
+
+
     //Collect Edges
     std::vector <edge> KruskalEdgeList;
     for (int i = 0; i < edgeList.size(); i++)
